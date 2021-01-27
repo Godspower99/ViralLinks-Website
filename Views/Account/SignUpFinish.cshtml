@@ -1,0 +1,199 @@
+@model SignUpFormPart2Model;
+
+@{
+    ViewBag.Title = "Sign up ";
+    var request = Context.Request;
+    var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+}
+
+<div class="row">
+    <div class="col">
+        <div class="container">
+            <!-- Header Text -->
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 text-center">
+                    <h3 style="font-weight: 400;font-size: 24px;">SIGN UP</h3>
+                    <p style="font-weight: 400;font-size: 18px;" >(2/2)</p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+
+            <!-- Login FOrm -->
+            <form asp-action="SignUpFinish" asp-controller="Account" method="POST">
+                <input hidden asp-for="ReferralID"/>
+                <input hidden asp-for="Username"/>
+                <input hidden asp-for="Email"/>
+
+                <!-- profile picture upload -->
+                <div class="row pt-1">
+                    <div class="col-3 col-md-5"></div>
+                    <div class="col-6 col-md-2"  id="profile-picture"
+                        style="background-image: url(https://localhost:5001/avatar.png);height: 200px;width: 200px;border-radius: 5000px;background-repeat: no-repeat;background-position: center;background-size: 100% 100%;background-origin: border-box;"                        <div class="container p-0">
+                            <div class="row">
+                                <input id="photo-input" type="file" hidden/>
+                                <div class="col-12" style="height: 75px;"></div>
+                                <div class="col-12" style="height: 75px; background-color: transparent;"></div>
+                                <div class="col-12 p-0" style="height: 50px; background-color: transparent;">
+                                    <div id="upload-button" class="float-right" style="height: 50px; width: 50px; background-color: transparent;border-radius: 100px;margin-right: 0px;padding-bottom: 0rem;margin-top: 0px; cursor:pointer;">
+                                        <i class="material-icons" style="font-size: 45px; color: #262F56;">camera_alt</i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3 col-md-5"></div>
+                </div>
+
+                <!-- Username -->
+                <div class="row pt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 text-center">
+                        <p style="font-weight: 400;font-size: 20px; color:#262F56;" >@Model.Username</p>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+
+
+                <!-- Password -->
+                <div class="row pt-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
+                        border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
+                        padding-bottom: 3rem;font-size: 18px;">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-10">
+                                    <input asp-for="Password" id="password-input-1" type="password" asp-for="Password" placeholder=" Enter password" style="font-size:18px; font-weight:400; border: none;"/>
+                                </div>
+                                <div class="col-2">
+                                    <label id = "password_type_toggle_1"><i class="material-icons" style="color: #262F56;">visibility</i></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                
+                <!-- Confirm Password -->
+                <div class="row pt-5">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
+                        border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
+                        padding-bottom: 3rem;font-size: 18px;">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-10">
+                                    <input asp-for="ConfirmPassword" id="password-input-2" type="password" asp-for="Password" placeholder=" Confirm password" style="font-size:18px; font-weight:400; border: none;"/>
+                                </div>
+                                <div class="col-2">
+                                    <label id = "password_type_toggle_2"><i class="material-icons" style="color: #262F56;">visibility</i></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+
+                <!-- sign in Link -->
+                <div class="row pt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 text-center" style="color: #989898;margin-left: 1rem;margin-right: 1rem;">
+                        <p>
+                            Already a member? <a asp-action="SignIn" asp-controller="Account" style="color: #0395FF;"> Login here </a>
+                        </p>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+
+                <!-- finish button -->
+                <div class="row pt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 text-center" style="color: #989898;margin-left: 1rem;margin-right: 1rem;">
+                       <button class="btn" type="submit" style="color: #E0E0E0; background-color: #0395FF;width: 189px;height: 42px;border-radius: 15px;font-size: 18px;font-weight: 400;"> 
+                           Finish
+                       </button>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+  input[type="date"].valid, input[type="date"]:focus.valid, input[type="datetime-local"].valid, input[type="datetime-local"]:focus.valid, input[type="email"].valid, input[type="email"]:focus.valid, input[type="number"].valid, input[type="number"]:focus.valid, input[type="password"].valid, input[type="password"]:focus.valid, input[type="search-md"].valid, input[type="search-md"]:focus.valid, input[type="search"].valid, input[type="search"]:focus.valid, input[type="tel"].valid, input[type="tel"]:focus.valid, input[type="text"].valid, input[type="text"]:focus.valid, input[type="time"].valid, input[type="time"]:focus.valid, input[type="url"].valid, input[type="url"]:focus.valid, textarea.md-textarea.valid, textarea.md-textarea:focus.valid {
+    border-bottom: none;
+    box-shadow: 0 0 0 0 transparent;
+}
+    input[type="text"]:focus:not([readonly]),  input[type="password"]:focus:not([readonly]) {
+    border: none;
+    box-shadow: 0 0 0 0 transparent;
+}
+
+
+</style>
+
+<!-- Upload picture script -->
+<script defer>
+
+    var upload_button = document.getElementById('upload-button');
+    var photo_input = document.getElementById('photo-input');
+    var photo = document.getElementById("profile-picture");
+
+     var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                photo.style.backgroundImage ="url(" + e.target.result + ")";
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    photo_input.onchange = function(e){
+        readURL(this);
+    }
+
+    upload_button.onclick = function(e) {
+        photo_input.click();
+    };
+
+</script>
+
+<!--password toggle script-->
+<script defer>
+    var toggle_1 = document.getElementById('password_type_toggle_1');
+    var password_input_1 = document.getElementById('password-input-1');
+
+    var toggle_2 = document.getElementById('password_type_toggle_2');
+    var password_input_2 = document.getElementById('password-input-2');
+
+    toggle_1.onclick = function(e){
+        if(password_input_1.type === 'password')
+        {
+            password_input_1.type = "text";
+            toggle_1.firstElementChild.innerHTML = "visibility_off";
+        }
+        else if(password_input_1.type === 'text')
+        {
+            password_input_1.type = "password";
+            toggle_1.firstElementChild.innerHTML = "visibility";
+        }
+    }
+
+
+    toggle_2.onclick = function(e){
+        if(password_input_2.type === 'password')
+        {
+            password_input_2.type = "text";
+            toggle_2.firstElementChild.innerHTML = "visibility_off";
+        }
+        else if(password_input_2.type === 'text')
+        {
+            password_input_2.type = "password";
+            toggle_2.firstElementChild.innerHTML = "visibility";
+        }
+    }
+</script>

@@ -1,0 +1,32 @@
+@model LoginFormModel;
+
+@{
+    ViewBag.Title = "Login";
+    var request = Context.Request;
+    var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+}
+
+<div class="row">
+    <div class="col">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form asp-action="SignIn" asp-controller="Account" method="POST">
+                        <input type="text" asp-for="UsernameOrEmail" autofocus placeholder="Enter username or email"/>
+                        <span asp-validation-for="UsernameOrEmail"></span>
+                        <input type="password" asp-for="Password" placeholder="Enter password"/>
+                        <span asp-validation-for="Password"></span>        
+                        <button type="submit">
+                            Login
+                        </button>
+                    </form>
+                    <a asp-action="ForgotPassword" asp-controller="Account">
+                        forgot password ?
+                    </a>    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

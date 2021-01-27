@@ -1,48 +1,88 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ViralLinks</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ViralLinks</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <head style="overflow-y: auto;background-color: #F0F0F0;">
+        <meta name="viewport" content="width=device-width"/>
+        <title>
+            @ViewBag.Title | Viral Links
+        </title>
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="~/lib/fontawesome/css/all.css">
+        <!-- Google Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+        <!-- Bootstrap core CSS -->
+        <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="~/lib/mdbootstrap/css/mdb.min.css" rel="stylesheet">
+        <!-- JQuery -->
+        <script type="text/javascript" src="~/lib/jquery/jquery.min.js"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="~/lib/popper.js/umd/popper.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+        <!-- MDB core JavaScript -->
+        <script type="text/javascript" src="~/lib/mdbootstrap/js/mdb.min.js"></script>
+        <link rel="stylesheet" href="~/css/site.css"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - ViralLinks - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <body style="width: 100%; padding: 0%; margin: 0px; background-color: #F0F0F0;">
+        <!-- Webpage Container -->
+        <div class="container-fluid p-0">    
+
+            <!--Navbar-->
+            <nav class="row navbar fixed-top pb-0" style="box-shadow: none; background-color: #E5E5E5;">
+                <div class="col-12">
+                    <div class="container">
+                        <div class="row w-100">
+                            <div class="col-2 p-0 pt-1">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                            <a class="navbar-brand" asp-controller="home" asp-action="index" style="width:max-content;">
+                                                <img alt="logo" src="~/favicon.ico" style="width: 2rem;"/>   
+                                            </a>
+                                        </div>
+                                        <div class="col-12 text-center pt-2" style="padding: 0rem;">
+                                            <i class="material-icons" style="font-size: 3rem;">menu</i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-10 p-0">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h3 style="color: #0395FF; font-size: 24px; line-height:28.13px; font-weight:400;">VIRALLINKS FORUM</h3>
+                                        </div>
+                                        <div class="col-12 pt-2">
+                                            <p style="text-transform: capitalize; color:#262F56; font-size:12px; line-height:20px; font-weight:300; margin-bottom:0.2rem;">One link to rule them all!</p>
+                                            <p style="text-transform: capitalize; color:#262F56; font-size:12px; font-weight:300; line-height: 0.9rem;">
+                                                Post your links and go viral. get results, reap rewards.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="col-12" style="background-color: #0395FF; height:5px;">
+                </div>
+            </nav>
+
+            <main style="margin-top: 135px;">
+                <!-- Main Content -->
+                @RenderBody()
+            </main>
+        
+            <!-- Footer -->
+            <footer class="row page-footer font-small lighten-3 pt-4" style="background-color: #f2f5fb; color: #697d8c;">
+            </footer>
+    
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
+            <partial name="_ValidationScriptsPartial"/>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
-</body>
+    </body>
 </html>
