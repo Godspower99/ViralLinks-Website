@@ -11,7 +11,7 @@ using ViralLinks.Helpers;
 
 namespace ViralLinks.Controllers
 {
-    [Route("home"), AllowAnonymous]
+    [Route(""), AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
