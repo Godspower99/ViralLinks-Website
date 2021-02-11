@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using ViralLinks.Data;
 using ViralLinks.InternalServices;
 
@@ -68,20 +71,76 @@ namespace ViralLinks
             // TODO :: REPLACE WITH CUSTOM TOKEN PROVIDERS
             .AddDefaultTokenProviders();
 
+            // Access token valid for 7 days, before sign-in is required
             services.Configure<DataProtectionTokenProviderOptions>(options => {
-                options.TokenLifespan = TimeSpan.FromDays(1);
+                options.TokenLifespan = TimeSpan.FromDays(7);
             });
             
             // TODO :: RE-CONFIGURE COOKIE
             services.ConfigureApplicationCookie(config => {
-                config.AccessDeniedPath = "/home";
+                config.AccessDeniedPath = "/account/sign-in";
                 config.LoginPath = "/account/sign-in";
                 config.ClaimsIssuer = "virallinks.com"; 
                 config.ReturnUrlParameter = "returnUrl";
             });
 
+            // Configure Authorization
+            services.AddAuthorization(config => {
+                
+                // authenticated user authorization policy
+                config.AddPolicy(AuthorizationPolicies.AuthenticatedPolicy, policy => {
+                    policy.RequireAuthenticatedUser();
+                });
+                
+                // Members authorization policy
+                config.AddPolicy(AuthorizationPolicies.MemberAuthorizationPolicy, policy => {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireAssertion((context) => {
+                        var role_claim = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+                        if(role_claim == null)
+                        {
+                            Log.Warning("***** CLAIM Not Found *******");
+                            return false;
+                        }
+                        if(role_claim.Value == Roles.Member)
+                        {
+                            return true;
+                        }
+                        return false;
+                    });
+                });
+
+                 // VIP members authorization policy
+                config.AddPolicy(AuthorizationPolicies.VipMemberAuthorizationPolicy, policy => {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireAssertion((context) => {
+                        var role_claim = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+                        if(role_claim == null)
+                        {
+                            Log.Warning("***** CLAIM Not Found *******");
+                            return false;
+                        }
+                        if(role_claim.Value == Roles.VIP)
+                        {
+                            return true;
+                        }
+                        return false;
+                    });
+                });
+            });
+
             // Register Services
             services.AddTransient<ICommunicationServices,CommunicationServices>();
+            services.AddScoped<FileSystemService>();
+
+             // Add Url Generator Service
+            services.AddScoped<IUrlGenerator>(o =>
+            {
+                var accessor = o.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UrlGenerator(uri);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,RoleManager<IdentityRole> roleManager)
@@ -115,6 +174,11 @@ namespace ViralLinks
             if(!await roleManager.RoleExistsAsync(Roles.Member))
             {
                 await roleManager.CreateAsync(new IdentityRole(Roles.Member));
+            }
+            // add vip role
+            if(!await roleManager.RoleExistsAsync(Roles.VIP))
+            {
+                await roleManager.CreateAsync(new IdentityRole(Roles.VIP));
             }
             // add admin role
             if(! await roleManager.RoleExistsAsync(Roles.Admin))

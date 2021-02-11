@@ -4,6 +4,7 @@ namespace ViralLinks.Data
 {
     public class ApplicationUser : IdentityUser
     {
-        
+    
     }
+
 }

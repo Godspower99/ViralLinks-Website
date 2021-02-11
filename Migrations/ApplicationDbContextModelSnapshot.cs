@@ -215,6 +215,170 @@ namespace ViralLinks.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("ViralLinks.Data.Post", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoryId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("ViralLinks.Data.PostCategory", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Header")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubHeader")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PostCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "all",
+                            Description = "Keep enjoying your preferences on virallinks to keep updating your feeds for you.",
+                            Header = "Feeds for you",
+                            Position = 0,
+                            SubHeader = "Feeds customized using your activities."
+                        },
+                        new
+                        {
+                            Id = "online_shops",
+                            Description = "Post your online shop links with the description of what you have to offer.",
+                            Header = "Online shops",
+                            Position = 1,
+                            SubHeader = "Your Customers Are Waiting."
+                        },
+                        new
+                        {
+                            Id = "whatsapp_groups",
+                            Description = "Post your whatsapp group link with a brief description of what the group is about.",
+                            Header = "WhatsApp groups",
+                            Position = 2,
+                            SubHeader = "Your Members Are Here."
+                        },
+                        new
+                        {
+                            Id = "social_media_pages",
+                            Description = "Post your Facebook, Instagram, Twitter and other social media page links.",
+                            Header = "Social media pages",
+                            Position = 3,
+                            SubHeader = "Get Those Likes, Shares and Followers Now."
+                        },
+                        new
+                        {
+                            Id = "professional_services",
+                            Description = "Post the professional services you offer - Doctors, Lawyers, Architects, Engineers, Teachers, Artists, Designers, Accountants, Etc.",
+                            Header = "Professional Services",
+                            Position = 4,
+                            SubHeader = "Get Your Clients Now."
+                        },
+                        new
+                        {
+                            Id = "occasions_and_events",
+                            Description = "Post Information on your upcoming events - weddings, birthdays, crusades, shows, dedications, anniversaries, etc.",
+                            Header = "Occasions and Events",
+                            Position = 5,
+                            SubHeader = "We Will Turn Up Live."
+                        },
+                        new
+                        {
+                            Id = "youtube_channels",
+                            Description = "Post your YouTube channel links.",
+                            Header = "YouTube channels",
+                            Position = 6,
+                            SubHeader = "Boost Your Views, Likes. Comments And Subscribers"
+                        },
+                        new
+                        {
+                            Id = "crypto_and_forex",
+                            Description = "Post your Crypto earning sites and Forex opportunities.",
+                            Header = "Crypto And Forex",
+                            Position = 7,
+                            SubHeader = "Lets Earn Digital Gold."
+                        },
+                        new
+                        {
+                            Id = "real_estate_business",
+                            Description = "Post your lands, buildings, rooms, properties to let and to lease etc.",
+                            Header = "Real Estate Business",
+                            Position = 8,
+                            SubHeader = "Make Sales Now."
+                        },
+                        new
+                        {
+                            Id = "network_marketing",
+                            Description = "Post your Network Marketing business with a brief description of the products and compensation plan.",
+                            Header = "Network Marketing",
+                            Position = 9,
+                            SubHeader = "Your Success Lines Are Here."
+                        },
+                        new
+                        {
+                            Id = "jobs_careers_vacancies",
+                            Description = "Post your job vacancies.",
+                            Header = "Job, Careers, Vacancies",
+                            Position = 10,
+                            SubHeader = "Employees Are Waiting."
+                        },
+                        new
+                        {
+                            Id = "online_earning_platforms",
+                            Description = "Post confirmed paying sites with your proof of payments.",
+                            Header = "Online Earning Platforms",
+                            Position = 11,
+                            SubHeader = "Let's earn with you"
+                        });
+                });
+
+            modelBuilder.Entity("ViralLinks.Data.ProfilePicture", b =>
+                {
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserID");
+
+                    b.ToTable("ProfilePictures");
+                });
+
             modelBuilder.Entity("ViralLinks.Data.SignUpForm", b =>
                 {
                     b.Property<string>("ID")

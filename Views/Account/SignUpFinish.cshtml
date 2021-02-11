@@ -20,7 +20,7 @@
             </div>
 
             <!-- Login FOrm -->
-            <form asp-action="SignUpFinish" asp-controller="Account" method="POST">
+            <form asp-action="SignUpFinish" asp-controller="Account" method="POST" enctype="multipart/form-data">
                 <input hidden asp-for="ReferralID"/>
                 <input hidden asp-for="Username"/>
                 <input hidden asp-for="Email"/>
@@ -29,15 +29,16 @@
                 <div class="row pt-1">
                     <div class="col-3 col-md-5"></div>
                     <div class="col-6 col-md-2"  id="profile-picture"
-                        style="background-image: url(https://localhost:5001/avatar.png);height: 200px;width: 200px;border-radius: 5000px;background-repeat: no-repeat;background-position: center;background-size: 100% 100%;background-origin: border-box;"                        <div class="container p-0">
+                        style="background-image: url(@baseUri/avatar.png);height: 200px;width: 200px;border-radius: 5000px;background-repeat: no-repeat;background-position: center;background-size: 100% 100%;background-origin: border-box;">
+                        <div class="container p-0">
                             <div class="row">
-                                <input id="photo-input" type="file" hidden/>
+                                <input id="photo-input" type="file" asp-for="ProfilePicture" hidden/>
                                 <div class="col-12" style="height: 75px;"></div>
                                 <div class="col-12" style="height: 75px; background-color: transparent;"></div>
                                 <div class="col-12 p-0" style="height: 50px; background-color: transparent;">
                                     <div id="upload-button" class="float-right" style="height: 50px; width: 50px; background-color: transparent;border-radius: 100px;margin-right: 0px;padding-bottom: 0rem;margin-top: 0px; cursor:pointer;">
-                                        <i class="material-icons" style="font-size: 45px; color: #262F56;">camera_alt</i>
-                                    </div>
+                                        <i class="material-icons" style="font-size: 40px; color: #262F56;">camera_alt</i>
+                                    </div>                            
                                 </div>
                             </div>
                         </div>
@@ -53,7 +54,6 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
-
 
                 <!-- Password -->
                 <div class="row pt-2">
@@ -74,6 +74,11 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
+                <div class="row p-0 text-center shake" style="font-size: 14px; color: #0395FF;">
+                    <div class="col-12">
+                        <span asp-validation-for="Password"></span>
+                    </div>
+                </div>   
                 
                 <!-- Confirm Password -->
                 <div class="row pt-5">
@@ -93,6 +98,11 @@
                         </div>
                     </div>
                     <div class="col-md-3"></div>
+                </div>
+                <div class="row p-0 text-center shake" style="font-size: 14px; color: #0395FF;">
+                    <div class="col-12">
+                        <span asp-validation-for="ConfirmPassword"></span>
+                    </div>
                 </div>
 
                 <!-- sign in Link -->
@@ -116,6 +126,7 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
+
             </form>
         </div>
     </div>
@@ -131,6 +142,25 @@
     box-shadow: 0 0 0 0 transparent;
 }
 
+.shake {
+    -webkit-animation-name: shake;
+    -moz-animation-name: shake;
+    -o-animation-name: shake;
+    animation-name: shake;
+    -webkit-animation-duration: 4s;
+    -moz-animation-duration: 4s;
+    -o-animation-duration: 4s;
+    animation-duration: 4s;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    -o-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;    
+    -o-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-transition-timing-function:linear;    
+}
 
 </style>
 
@@ -182,8 +212,6 @@
             toggle_1.firstElementChild.innerHTML = "visibility";
         }
     }
-
-
     toggle_2.onclick = function(e){
         if(password_input_2.type === 'password')
         {

@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -20,10 +21,11 @@ namespace ViralLinks.Controllers
         private SignInManager<ApplicationUser> signInManager;
         private ApplicationDbContext dbContext;
         private ICommunicationServices comms;
+        private FileSystemService fileSystemService;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager, ApplicationDbContext dbContext,
-            ICommunicationServices comms)
+            ICommunicationServices comms, FileSystemService fileSystemService)
         {
             this.userManager = userManager ??
                 throw new ArgumentNullException(nameof(userManager));
@@ -33,6 +35,8 @@ namespace ViralLinks.Controllers
                 throw new ArgumentNullException(nameof(dbContext));
             this.comms = comms ??
                 throw new ArgumentNullException(nameof(comms));
+            this.fileSystemService = fileSystemService ??
+                throw new ArgumentNullException(nameof(fileSystemService));
         }
 
         /// <summary>
@@ -47,7 +51,7 @@ namespace ViralLinks.Controllers
         {
             if(await userManager.FindByEmailAsync(email) != null)
             {
-                return Json($"Email {email} has already been registered");
+                return Json($"{email} has already been registered");
             }
             return Json(true);
         }
@@ -64,11 +68,10 @@ namespace ViralLinks.Controllers
         {
             if(await userManager.FindByNameAsync(username) != null)
             {
-                return Json($"Username {username} has been used");
+                return Json($"{username} has been used");
             }
             return Json(true);
         }
-
 
         [HttpGet, Route("sign-up/start"),Route("sign-up")]
         public ActionResult SignUpStart(string referral_id)
@@ -101,7 +104,6 @@ namespace ViralLinks.Controllers
             Log.Information("Going to sign-up page 2");
             await dbContext.SaveChangesAsync();
             return RedirectToAction(actionName: "SignUpFinish", controllerName: "Account", routeValues: firstForm);
-            // return View(viewName: "SignUpFinish", model: firstSignUpForm);
         }
 
         [HttpGet, Route("sign-up/finish")]
@@ -134,7 +136,11 @@ namespace ViralLinks.Controllers
             var registereduser = await userManager.FindByEmailAsync(newUser.Email);
             await userManager.AddToRoleAsync(registereduser,Roles.Member);
 
-            await comms.SendWelcomeEmail(registereduser, Request.Host.ToUriComponent());
+            // update profile picture
+            Log.Information("Uploading Profile Picture");
+            await fileSystemService.UpdateProfilePicture(registereduser,finalForm.ProfilePicture);
+           // await comms.SendWelcomeEmail(registereduser, Request.Host.ToUriComponent());
+            Log.Information($"profile Picture :: {finalForm.ProfilePicture.FileName}");
             // TODO :: SEND ACCOUNT VERIFICATION EMAIL
             // TODO :: FIX IN AFFLIATE REGISTRATION
 
@@ -171,7 +177,6 @@ namespace ViralLinks.Controllers
                 Log.Warning("Invalid Login form");
                 return View(loginForm);
             }
-
             // try find user by email
             var user = await userManager.FindByEmailAsync(loginForm.UsernameOrEmail);
             if(user == null)
@@ -184,22 +189,18 @@ namespace ViralLinks.Controllers
                     return View(loginForm);
                 }
             }
-
             // verifiy password
             if(!await userManager.CheckPasswordAsync(user,loginForm.Password))
             {
                 Log.Warning("password validation failed");
                 return View(loginForm);
             }
-    
             var result = await SignInUser(user);
-
             // signin user
             if(result != string.Empty)
             {
                 return Redirect(result);
             }
-
             Log.Warning("Complete login failure");
             return View(loginForm);
         }
@@ -266,7 +267,6 @@ namespace ViralLinks.Controllers
             return Redirect("/home");
         }
 
-
         [HttpGet, Route("reset-password")]
         public ActionResult ResetPassword(string userid, string token)
         {
@@ -293,6 +293,35 @@ namespace ViralLinks.Controllers
             return View();
         }
 
+
+        [HttpGet, Route("profile"),Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
+        public async Task<ActionResult> Profile()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            var viewModel = new ProfileModel();
+            viewModel.User = user;
+            return View(model: viewModel);
+        }
+
+
+        [HttpGet, Route("create-post")]
+        public ActionResult CreatePost()
+        {
+            return View();
+        }
+
+        [HttpGet, Route("full-post")]
+        public ActionResult FullPost()
+        {
+            return View();
+        }
+
+        [HttpGet, Route("pic")]
+        public async Task<ActionResult> Picture(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            return Ok(await this.fileSystemService.GetProfilePictureAsync(user.Id));
+        }
 
         public async Task<ActionResult> Delete(string email)
         {

@@ -1,0 +1,116 @@
+.menuText {
+    color: red;
+    padding-left: 30px;
+}
+
+.nabMenuBar{
+    color: #262F56 !important;
+    font-size: 24px !important;
+}
+.nav-menu-item{
+    text-decoration: none;
+    color: black;
+}
+.nav-menu-item:hover{
+    text-decoration: none;
+    color: gray;
+    border-left: 5px solid white;
+    transition: 0.1s;
+}
+.sideNavOpen{
+    height: 100%;
+    width: 220px;
+    position: fixed;
+    top:0;
+    left: 0;
+    z-index: 100;
+    overflow-x: hidden;
+    padding-left: 10px;
+    padding-top: 20px;
+    transition: 0.1s;
+    background-color: #F0F0F0;
+}
+.sideNavClose{
+    height: 100%;
+    width: 60px;
+    position: fixed;
+    top:0;
+    left: 0;
+    z-index: 100;
+    overflow-x: hidden;
+    padding-left: 10px;
+    padding-top: 20px;
+    transition: 0.1s;
+    background-color: #F0F0F0;
+}
+.ContentOverlay{
+    display: block;
+    position: fixed;
+    height: 100%;
+    top:0;
+    left: 0;
+    z-index: 7;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    background-color: #000000;
+    opacity: 0.1;
+}
+.ContentOverlayClose{
+   display: none;
+}
+.Content{
+    margin-left: 60px;
+    margin-top: 60px;
+    z-index: 5;
+}
+
+
+@media (max-width: 575.98px) {
+
+    .Content{margin-left: 00px;}
+    .sideNavClose{visibility: hidden}
+
+}
+
+.side-nav-item-text {
+    color: #262F56;
+    font-weight: 400;
+}
+
+.sideNavClose .side-nav-item-text{
+   visibility: hidden;
+    height: 0px;
+}
+
+.sideNavOpen .sidenav-items-wrapper{
+    padding-left: 25px;
+    padding-top: 30px;
+}
+
+.sideNavClose .sidenav-items-wrapper{
+    padding-left: 0px;
+    padding-top: 30px;
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+}
+
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+
+}
+
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+
+
+}
+
+
+@media (min-width: 1200px) {
+
+
+}

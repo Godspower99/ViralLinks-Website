@@ -1,0 +1,206 @@
+@using System.Security.Claims
+@model ProfileModel;
+
+@{
+    ViewBag.Title = "Profile page";
+    ViewBag.Background = "#F5F5F5";
+    var request = Context.Request;
+    var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+    var role = Context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+}
+
+    <!-- profile picture upload -->
+    <div class="row pt-1">
+        <div class="col-3 col-md-5"></div>
+        <div class="col-6 col-md-2"  id="profile-picture"
+            style="background-image: url(@Model.ProfilePicture);height: 200px;width: 200px;border-radius: 5000px;background-repeat: no-repeat;background-position: center;background-size: 100% 100%;background-origin: border-box;">
+            <div class="container p-0">
+                <div class="row">
+                    <input id="photo-input" type="file"  hidden/>
+                    <div class="col-12" style="height: 75px;"></div>
+                    <div class="col-12" style="height: 75px; background-color: transparent;"></div>
+                    <div class="col-12 p-0" style="height: 50px; background-color: transparent;">
+                        <div id="upload-button" class="float-right" style="height: 50px; width: 50px; background-color: transparent;border-radius: 100px;margin-right: -5.5rem;padding-bottom: 0rem;margin-top: -5.5rem; cursor:pointer;"">
+                            <i class="material-icons" style="font-size: 30px; color: #0395FF;">camera_alt</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 col-md-5"></div>
+    </div>
+
+    <!-- Username -->
+    <div class="row pt-3">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-center">
+            <p style="font-weight: 400;font-size: 20px; color:black;" >@Model.User.UserName</p>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+    <!-- Saved Links -->
+    <div class="row pt-0">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-center">
+            <p style="font-weight: 400;font-size: 14px; color:#505050; text-decoration: underline" >View saved links</p>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+    <!-- Member Area -->
+    <div class="row pt-2" style="">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-center">
+            <div class="container">
+                <!--Username-->
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-6 col-md-5 text-left form-control" style="color: #000000;margin-left: 2rem;
+                        border-top-width: 1px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
+                        padding-bottom: 3rem;font-size: 14px; font-weight: 400">
+                        <p class="pt-2 pl-2">@role</p>
+                    </div>
+                    <div class="col-4 col-md-3 text-center form-control" style="color: #505050;margin-right: 2rem;
+                        border-top-width: 1px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
+                        padding-bottom: 3rem;font-size: 14px;background-color: #F0F0F0;">
+                        <p style="text-decoration: underline;" class="pt-2">Upgrade to VIP</p>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+    <!-- Email -->
+    <div class="row pt-0" style="margin-top: -20px;">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-center">
+            <div class="container">
+                <!--Email-->
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div style="color: #000000;margin-left: 2rem;
+                        border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
+                        padding-bottom: 3rem;font-size: 14px; font-weight: 400" class="col-9 col-md-7 text-left form-control">
+                        <p class="pt-2 pl-2">@Model.User.Email</p>
+                    </div>
+                    <div style="color: #0395FF;margin-right: 0rem;
+                        border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
+                        padding-bottom: 3rem;font-size: 14px;" class="col-1 col-md-1 text-center form-control"><div style="border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 4px;border-bottom-color: red;
+                            padding-bottom: 0rem;" class="text-center pt-2">
+                            <i class="material-icons" style="font-size: 20px;">border_color</i>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+    <!-- Bank details -->
+    <div class="row pt-0" style="margin-top: -20px;">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-center">
+            <div class="container">
+                <!--Email-->
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div style="color: #000000;margin-left: 2rem; line-height:0.5;
+                        border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
+                        padding-bottom: 3rem;font-size: 14px; font-weight: 400;height: 120px;" class="col-9 col-md-7 text-left form-control">
+                        <p style="font-weight: 500" class="pt-3 pl-2">Account Details</p>
+                        <p class="pl-2 pt-1">Bank: First Bank of Nigeria</p>
+                        <p class="pl-2">Account Number: 123456789</p>
+                        <p class="pl-2">Account Name: Otiete Godspower</p>
+                    </div>
+                    <div style="color: #0395FF;margin-right: 0rem;
+                        border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
+                        padding-bottom: 3rem;font-size: 14px;height: 120px;" class="col-1 col-md-1 text-center form-control"><div style="border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 4px;border-bottom-color: red;
+                            padding-bottom: 0rem;" class="text-center pt-5">
+                            <i class="material-icons" style="font-size: 20px;">border_color</i>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+    <!-- Change Password -->
+    <div class="row pt-0" style="margin-top: -20px;">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-center">
+            <div class="container">
+                <!--Email-->
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div style="color: #000000;margin-left: 2rem;
+                        border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
+                        padding-bottom: 3rem;font-size: 14px; font-weight: 400" class="col-10 col-md-8 text-left form-control">
+                        <p class="pt-2 pl-2">Change password</p>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+    <!-- Create Post Button -->
+    <div class="row pt-3">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-center" style="color: #989898;margin-left: 1rem;margin-right: 1rem;">
+            <button class="btn pt-1" type="submit" style="color: #E0E0E0 !important; background-color: #0395FF;width: 166px;height: 32px;border-radius: 15px;font-size: 18px;font-weight: 400;"> 
+                Create a Post
+            </button>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+    <!-- View Saved Links -->
+    <div class="row pt-4">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+            <div class="container">
+                <!-- Saved links -->
+                <div class="row">
+                   <div class="col-12 text-left">
+                        <p class="pt-2 pl-2" style="font-size: 16px; color:black; font-weight:400">Your links (28)</p>
+                   </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+    <!-- Upload picture script -->
+<script defer>
+
+    var upload_button = document.getElementById('upload-button');
+    var photo_input = document.getElementById('photo-input');
+    var photo = document.getElementById("profile-picture");
+
+     var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                photo.style.backgroundImage ="url(" + e.target.result + ")";
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    photo_input.onchange = function(e){
+        readURL(this);
+    }
+
+    upload_button.onclick = function(e) {
+        photo_input.click();
+    };
+
+</script>

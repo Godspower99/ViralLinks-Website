@@ -19,10 +19,11 @@
                 <div class="col-md-3"></div>
             </div>
 
-            <!-- Login FOrm -->
+            <!-- Login Form -->
             <form asp-action="SignUpStart" asp-controller="Account" method="POST">
                 <input asp-for="ID" hidden/>
                 <input asp-for="ReferralID" hidden/>
+
                 <!--Username-->
                 <div class="row pt-3">
                     <div class="col-md-3"></div>
@@ -39,8 +40,13 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
+                <div class="row p-0 text-center shake" style="font-size: 14px; color: #0395FF;">
+                    <div class="col-12">
+                        <span asp-validation-for="Username"></span>
+                    </div>
+                </div>
 
-                <!--Username-->
+                <!--Email-->
                 <div class="row pt-5">
                     <div class="col-md-3"></div>
                     <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
@@ -56,6 +62,11 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
+                <div class="row p-0 text-center shake" style="font-size: 14px; color: #0395FF;">
+                    <div class="col-12">
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                </div>                
                 
                 <!-- sign up Link -->
                 <div class="row pt-3">
@@ -91,5 +102,25 @@
     input[type="text"]:focus:not([readonly]),  input[type="password"]:focus:not([readonly]) {
     border: none;
     box-shadow: 0 0 0 0 transparent;
+}
+
+.shake {
+    -webkit-animation-name: shake;
+    -moz-animation-name: shake;
+    -o-animation-name: shake;
+    animation-name: shake;
+    -webkit-animation-duration: 4s;
+    -moz-animation-duration: 4s;
+    -o-animation-duration: 4s;
+    animation-duration: 4s;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    -o-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;    
+    -o-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-transition-timing-function:linear;    
 }
 </style>

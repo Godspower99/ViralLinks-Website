@@ -14392,6 +14392,11 @@
   "RootNamespace": "ViralLinks",
   "Documents": [
     {
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Home/MembershipDescription.cshtml",
+      "TargetPath": "Views\\Home\\MembershipDescription.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Account/ResetPasswordMailSent.cshtml",
       "TargetPath": "Views\\Account\\ResetPasswordMailSent.cshtml",
       "FileKind": "mvc"
@@ -14417,8 +14422,18 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Account/Profile.cshtml",
+      "TargetPath": "Views\\Account\\Profile.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Shared/_Layout.cshtml",
       "TargetPath": "Views\\Shared\\_Layout.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Account/CreatePost.cshtml",
+      "TargetPath": "Views\\Account\\CreatePost.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14434,11 +14449,6 @@
     {
       "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Shared/_ValidationScriptsPartial.cshtml",
       "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Shared/Error.cshtml",
-      "TargetPath": "Views\\Shared\\Error.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14464,6 +14474,11 @@
     {
       "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Home/Privacy.cshtml",
       "TargetPath": "Views\\Home\\Privacy.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Account/FullPost.cshtml",
+      "TargetPath": "Views\\Account\\FullPost.cshtml",
       "FileKind": "mvc"
     }
   ],

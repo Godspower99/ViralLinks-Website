@@ -1,0 +1,126 @@
+@{
+    ViewBag.Title = "Post";
+    var request = Context.Request;
+    var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+}
+
+            <!-- Feeds for you -->
+            <div class="row pt-0">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <div class="container p-0">
+                  <div class="row pb-2 pt-2 style="background-color:transparent; margin-left: 1px; height: 100px;">
+                    <!-- First Post -->
+                    <div class="col-12 p-0 pl-4 pr-2 pb-2">
+                      <div class="post_item" style="height: 370px;">
+                        <div class="container">
+                          <div class="row pt-3">
+                            <!--Image and name-->
+                            <div class="col-12">
+                              <img class="float-left post_item_image" src="@baseUri/avatar.png">
+                              <p class="float-left pl-3 pt-2 post_item_name">alexandria piconta <br> <span class="post_item_category">.WhatsApp Links</span></p>
+                              <p class="float-right pr-3 pt-2 post_item_date">2d ago</p>
+                            </div> 
+                            <!--Subject-->
+                            <div class="col-12">
+                              <p class="pl-3 pt-0 post_item_subject">This is the subject of this post. It must not go past two lines on the feeds page.</p>
+                            </div>      
+                            <!--Description--> 
+                            <div class="col-12 text-center" style="height: max-content;">
+                              <img class="post_item_description_image" src="@baseUri/image.jpg" style="height: 300px; width: 80%;">
+                            </div>
+                            <!-- icons -->              
+                            <div class="col-12 pt-2 ">
+                              <div class="container pl-4">
+                                <div class="row">
+                                  <div class="col-4 p-0 pl-5">
+                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye"></i> 187</p>
+                                  </div>
+                                  <div class="col-2 p-0">
+                                    <p style="font-size: 16px;"><i class="fa fa-comments" style="color:#0395FF;"></i> 5</p>
+                                  </div>
+                                  <div class="col-2 p-0">
+                                    <p style="font-size: 16px;"><i class="fa fa-certificate" style="color: #262F56;"></i> 24</p>
+                                  </div>
+                                  <div class="col-2">
+                                    <p style="font-size: 16px;"><i class="material-icons" style="color: #0395FF;">turned_in_not</i></p>
+                                  </div>
+                                  <div class="col-2">
+                                    <p style="font-size: 16px;"><i class="fa fa-ellipsis-v" style="color: #0395FF;"></i></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!--Link-->
+                            <div class="col-12 text-center pt-0">
+                              <p class="pt-2 post_item_description_text"> The description of the link will appear on the first 4 lines, with a 3 dots extension and a final read more info to spur user to go through the remaining part of the description before choosing to click on the link shared. This would help not to clutter the feeds page. The description of the link will appear on the first 4 lines, with a 3 dots extension and a final read more info to spur user to go through the remaining part of the description before choosing to click on the link shared. This would help not to clutter the feeds page.</p>
+                              <a href="https://thisiswherelinkswillappear.com/in2linesatmostasshownhere">
+                               <p class="post_item_link"> https://thisiswherelinkswillappear.com/in2linesatmostasshownhere</p>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>                   
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+
+<style>
+ .post_item {
+   background-color: #F0F0F0;
+   border-radius: 5px;
+ }
+ 
+ .post_item_image {
+   border-radius: 100%; 
+   height: 40px; 
+   width: 40px;
+ }
+ 
+ .post_item_name {
+   font-size: 16px;
+   font-weight: 400;
+   text-transform: capitalize;
+ }
+ 
+ .post_item_category {
+   color: #0395FF;
+   font-size: 13px;
+   font-weight: 400;
+ }
+ 
+ .post_item_date {
+   font-size: 14px;
+   color: black;
+   font-weight: 300;
+ }
+ 
+ .post_item_subject {
+   color: #262F56;
+   font-size: 16px;
+   font-weight: 400;
+ }
+ 
+ .post_item_description_image {
+   width: 300px;
+   height: 273;
+   border-radius: 5px; 
+   margin:10px;
+ }
+ 
+ .post_item_description_text {
+   font-size: 16px;
+   font-weight: 300;
+ }
+ 
+ .post_item_link {
+   color: #0395FF;
+   font-size: 16px;
+   font-weight: 400;
+   font-style: italic;
+ }
+ </style>

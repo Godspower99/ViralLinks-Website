@@ -1,10 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ViralLinks.ValidationAttributes;
 
 namespace ViralLinks.Models
 {
-    public class SignUpFormPart1Model : BaseModel
+    public class SignUpFormPart1Model 
     {
         public string ReferralID { get; set; }
 
@@ -14,8 +16,8 @@ namespace ViralLinks.Models
         public string Username { get; set; }
         
         [Display(Name = "Email"),
-        EmailAddress(ErrorMessage = "Invalid e-mail address"),
-        Required(ErrorMessage = "Invalid e-mail address"),
+        EmailAddress(ErrorMessage = "please enter e-mail address"),
+        Required(ErrorMessage = "please enter e-mail address"),
         Remote(action: "ValidateEmail", controller: "Account")]     
         public string Email { get; set; }
 
@@ -57,6 +59,12 @@ namespace ViralLinks.Models
         Required(ErrorMessage = "Invalid e-mail address"),
         Remote(action: "ValidateEmail", controller: "Account")]
         public string Email { get; set; }
+
+        [Display(Name = "Profile Picture"),
+        DataType(DataType.Upload),
+        MaxFileSize(5),
+        AllowedExtensions(".jpg", ".png", ".jpeg")]
+        public IFormFile ProfilePicture { get; set;}
 
         public SignUpFormPart2Model(){}
 

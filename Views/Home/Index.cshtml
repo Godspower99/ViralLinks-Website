@@ -1,72 +1,485 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model HomePageModel
+@{
+    ViewBag.Title = "Feeds for you";
+    var request = Context.Request;
+    var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+    ViewBag.BackgroundColor = "White";
+    var userIsAuthorized = Context.User.Identity.IsAuthenticated;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome 1 </h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome 2</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Viral links welcome page</p>
-</div>
+            <!--Top Texts-->
+            <div class="row">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <div class="container p-0">
+                  <div class="row">
+                    <div class="col-12">
+                      <p class="text-left float-left pl-4" style="color: black; font-size: 14px; margin-left: 10px; font-weight: 400;">Top Trending Links</p>
+                      <p class="text-right float-right pr-4" style="color: black; font-size: 12px; font-weight: 400;">25th Dec 2020</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+            
+           <!-- Carousel for top links-->
+            <div class="row pt-4">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <div class="container p-0">
+                  <div class="row">
+                    <div class="col-12">
+                      <!--Carousel Wrapper-->
+                      <div id="carousel-top-links" class="carousel slide carousel-fade w-100" style="margin-top: -35px; background-color: white; height: 150px;" data-ride="carousel">
+                        <!--Indicators-->
+                        <ol class="carousel-indicators">
+                          <li data-target="#carousel-top-links" data-slide-to="0" class="active" style="background-color: #989898;"></li>
+                          <li data-target="#carousel-top-links" data-slide-to="1" style="background-color: #989898;"></li>
+                          <li data-target="#carousel-top-links" data-slide-to="2" style="background-color: #989898;"></li>
+                        </ol>
+                        <!--/Indicators-->
+                        <!--Slides-->
+                        <div class="carousel-inner" role="listbox">
+                         
+                          <!-- Item 1-->
+                          <div class="carousel-item active">
+                            <div style="background-color: #A39468; height: 127px; margin-left: 2rem; margin-right:1rem; border-radius: 5px;">
+                              <div class="container-fluid">
+                                <!-- Link Type-->
+                                <div class="row">
+                                  <div class="col text-right pt-1">
+                                      <p style="color: #262F56; font-size: 12px; font-weight: 400; text-decoration: underline; margin-bottom: 0rem;">WhatsApp links</p>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-4 col-md-2 text-center">
+                                    <div style="border-radius: 1000px; height: 78px; width: 78px; background-color: #F0F0F0; padding:1px">
+                                      <img src="@baseUri/image.jpg" width="76" height="76" style="border-radius: 1000px; padding: 0rem; margin: 0rem;">
+                                    </div>
+                                    <div class="text-center">
+                                      <p style="font-size:12px; font-weight: 400; color: black; text-align: center;">Godspower</p>
+                                    </div>
+                                  </div>
+                                  <div class="col-8 col-md-10 pt-3">  
+                                    <p class="text-left" style="font-size: 14px; font-weight: 400; color:#F0F0F0;">Join our whatsapp group for more lessons to improve your culinary skills...</p>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-9 col-md-10"></div>
+                                  <div class="col-3 col-md-2"  style="margin-top: -35px;">
+                                    <i class="material-icons float-left p-0" style="color:#262F56; ">remove_red_eye</i>
+                                    <p class="p-0 text-right float-right; font-size: 14px; color: black;">187</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Item 2-->
+                          <div class="carousel-item">
+                            <div style="background-color: #A39468; height: 127px; margin-left: 2rem; margin-right:1rem; border-radius: 5px;">
+                              <div class="container-fluid">
+                                <!-- Link Type-->
+                                <div class="row">
+                                  <div class="col text-right pt-1">
+                                      <p style="color: #262F56; font-size: 12px; font-weight: 400; text-decoration: underline; margin-bottom: 0rem;">WhatsApp links</p>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-4 col-md-2 text-center">
+                                    <div style="border-radius: 1000px; height: 78px; width: 78px; background-color: #F0F0F0; padding:1px">
+                                      <img src="@baseUri/avatar.png" width="76" height="76" style="border-radius: 1000px; padding: 0rem; margin: 0rem;">
+                                    </div>
+                                    <div class="text-center">
+                                      <p style="font-size:12px; font-weight: 400; color: black; text-align: center;">Godspower</p>
+                                    </div>
+                                  </div>
+                                  <div class="col-8 col-md-10 pt-3">  
+                                    <p class="text-left" style="font-size: 14px; font-weight: 400; color:#F0F0F0;">Join our whatsapp group for more lessons to improve your culinary skills...</p>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-9 col-md-10"></div>
+                                  <div class="col-3 col-md-2"  style="margin-top: -30px;">
+                                    <i class="material-icons float-left p-0" style="color:#262F56; ">remove_red_eye</i>
+                                    <p class="p-0 text-right float-right; font-size: 14px; color: black;">187</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>                          
+                          
+                        </div>
+                        <!--/Slides-->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+
+            <!--Search-->
+            <div class="row pt-0">
+              <div class="col-1 col-md-4"></div>
+              <div class="col-10 col-md-4 text-center form-control" style="color: #989898;font-size: 18px; font-weight: 400; border-radius: 100px; background-color: #E5E5E5; margin-left: 7px;">
+                  <div class="container">
+                      <div class="row">
+                          <div class="col-10 text-center">
+                              <input type="search" class="p-0" placeholder=" Search" style="font-size:14px; font-weight:400; border: none; color: #505050;"/>
+                          </div>
+                          <div class="col-2">
+                            <i class="material-icons pt-1" style="color: #262F56; font-size: 24px; font-weight: 400;">search</i>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-1 col-md-4"></div>
+            </div>       
+          
+            <!-- Blue Text -->
+            <div class="row pt-1">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <div class="container p-0">
+                  <div class="row pb-2" style="background-color: #0395FF; border-radius: 5px; margin-left: 1px;">
+                    <div class="col-12 pl-1 pr-4">
+                      <!-- Feeds for you -->
+                      <div class="float-left text-center" style="background-color: #0395FF; height: 173px; width: 25%;">
+                        <div style="background-image: url(@baseUri/avatar.png); background-repeat: no-repeat;
+                          background-size: 50% 50%; background-position: center center; height: 65%; width: 100%;">
+                        </div>
+                       <div class="container-fluid p-0">
+                         <div class="row">
+                           <div class="col-12 p-0 pl-2 text-center" style="margin-top: -15px; color: white;">
+                             <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center">Feeds for you</p>
+                             <p style="font-size: 0.7rem; padding-left: 2rem; margin-top: -5px; font-weight: 400;" class="w-100 text-left">Posts customized by your activities</p>
+                           </div>                         
+                         </div>
+                       </div>
+                      </div>
+
+                      <!-- VIP Lounge -->
+                      <div class="float-left text-center" style="background-color: #0395FF; height: 173px; width: 25%;">
+                        <div style="background-image: url(@baseUri/avatar.png); background-repeat: no-repeat;
+                          background-size: 50% 50%; background-position: center center; height: 65%; width: 100%;">
+                        </div>
+                       <div class="container-fluid p-0">
+                         <div class="row">
+                           <div class="col-12 p-0 pl-2 text-center" style="margin-top: -15px; color: white;">
+                             <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center">VIP Lounge</p>
+                             <p style="font-size: 0.7rem; padding-left: 2rem; margin-top: -5px; font-weight: 400;" class="w-100 text-left">View trending trends by the admin</p>
+                           </div>                         
+                         </div>
+                       </div>
+                      </div>
+
+                      <!-- Telecom VTU -->
+                      <div class="float-left text-center" style="background-color: #0395FF; height: 173px; width: 25%;">
+                        <div style="background-image: url(@baseUri/avatar.png); background-repeat: no-repeat;
+                          background-size: 50% 50%; background-position: center center; height: 65%; width: 100%;">
+                        </div>
+                       <div class="container-fluid p-0">
+                         <div class="row">
+                           <div class="col-12 p-0 pl-2 text-center" style="margin-top: -15px; color: white;">
+                             <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center">Telecom VTU</p>
+                             <p style="font-size: 0.7rem; padding-left: 2rem; margin-top: -5px; font-weight: 400;" class="w-100 text-left">Cheapest data and airtimes at your fingertips</p>
+                           </div>                         
+                         </div>
+                       </div>
+                      </div>
+
+                      <!-- Admin Giveaway -->
+                      <div class="float-left text-center" style="background-color: #0395FF; height: 173px; width: 25%;">
+                        <div style="background-image: url(@baseUri/avatar.png); background-repeat: no-repeat;
+                          background-size: 50% 50%; background-position: center center; height: 65%; width: 100%;">
+                        </div>
+                       <div class="container-fluid p-0">
+                         <div class="row">
+                           <div class="col-12 p-0 pl-2 text-center" style="margin-top: -15px; color: white;">
+                             <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center">Admin Giveaway</p>
+                             <p style="font-size: 0.7rem; padding-left: 2rem; margin-top: -5px; font-weight: 400;" class="w-100 text-left">You could be our winner today</p>
+                           </div>                         
+                         </div>
+                       </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3"></div>
+            </div>          
+
+            <!-- Categories -->
+            <div class="row pt-0">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <div class="container p-0 pl-1">
+                  <div class="row pb-4" style="background-color: #F5F5F5; border-color: #c4c4c4; border-radius: 15px; margin-left: 1px;">
+                    
+                    <!-- Header Text-->
+                    <div class="col-12 text-center pt-4 pb-3">
+                      <p class="text-center" style="color: #505050; font-size: 18px;font-weight: 400;">Categories</p>
+                    </div>
+                    
+                    @foreach (var category in Model.PostCategories)
+                    {
+                      var selected = category.Id == Model.SelectedCategory ? "selected" : "";
+                      <div class="col-6 col-md-4 p-2 text-center">
+                        <a asp-controller="Home" asp-action="Index" asp-route-category="@category.Id">
+                          <div class="category @selected">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col-12 text-left p-0 pl-1 pt-1">
+                                  <i class="fa fa-circle category_dot"></i>
+                                </div>
+                                <div class="col-12 p-0">
+                                  <h5 class="category_header">@category.Header</h5>
+                                  <h6 class="category_subheader">- @category.SubHeader</h6>
+                                  <p class="category_subtext">@category.Description</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                    }                                                                                                                                                                
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+
+            <!-- Posts -->
+            <div class="row pt-4">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <div class="container p-0">    
+                  <!-- Posts Header -->
+                  <div class="row pb-2" style="margin-left: 1px;">
+                    <div class="col-12">
+                      <p class="text-left float-left pl-4" style="color: black; font-size: 16px; margin-left: 10px; font-weight: 400;">Feeds for you (@Model.Posts.TotalRecords)</p>
+                    </div> 
+
+                  </div>
+
+                  <!-- Post Objects -->
+                  <div class="row" style="margin-left: 1px;">
+                    
+                    <!-- First Post -->
+                    @foreach (var post in Model.Posts.Body)
+                    {
+                    <div class="col-12 p-0 pl-4 pr-2 pb-2">
+                      <div class="post_item" style="height: 306px;">
+                        <div class="container">
+                          <div class="row pt-3">
+                            <!--Image and name-->
+                            <div class="col-12">
+                              <img class="float-left post_item_image" src="@baseUri/avatar.png">
+                              <p class="float-left pl-3 pt-2 post_item_name" style="text-transform: capitalize;">@post.User.UserName<br> <span class="post_item_category">.@post.Post.CategoryId</span></p>
+                              <p class="float-right pr-3 pt-2 post_item_date">@post.Post.TimeStamp.ToShortDateString()</p>
+                            </div> 
+                            <!--Subject-->
+                            <div class="col-12">
+                              <p class="pl-3 pt-0 post_item_subject">@post.Post.Subject</p>
+                            </div>      
+                            <!--Description--> 
+                            <div class="col-12 text-center" style="height: max-content;">
+                              <img class="post_item_description_image float-left" src="@baseUri/virallinks-text.png" style="height: 90px; width: 100px;">
+                              <p class="pt-2 post_item_description_text">@post.Post.Description...</p>
+                            </div>
+                            <!--Link-->
+                            <div class="col-12 text-center pt-0">
+                              <a href="@post.Post.PostLink">
+                               <p class="post_item_link"> @post.Post.PostLink</p>
+                              </a>
+                            </div>                      
+                            <!-- icons -->              
+                            <div class="col-12 pt-2 pb-4">
+                              <div class="container pl-4">
+                                <div class="row">
+                                  <div class="col-4 p-0 pl-5">
+                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye"></i> 187</p>
+                                  </div>
+                                  <div class="col-2 p-0">
+                                    <p style="font-size: 16px;"><i class="fa fa-comments" style="color:#0395FF;"></i> 5</p>
+                                  </div>
+                                  <div class="col-2 p-0">
+                                    <p style="font-size: 16px;"><i class="fa fa-certificate" style="color: #262F56;"></i> 24</p>
+                                  </div>
+                                  <div class="col-2">
+                                    <p style="font-size: 16px;"><i class="material-icons" style="color: #0395FF;">turned_in_not</i></p>
+                                  </div>
+                                  <div class="col-2">
+                                    <p style="font-size: 16px;"><i class="fa fa-ellipsis-v" style="color: #0395FF;"></i></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>  
+                    }                                     
+
+                  </div>
+
+                  <!-- Posts Footer -->
+                  <div class="row pb-2" style="margin-left: 1px;">
+                    <div class="col-12 text-center">
+                      <!-- no posts -->
+                      @if(Model.Posts.TotalRecords == 0)
+                      {
+                        <p class="p-0" style="font-size: 14px; color: black; font-weight: 400;">You have no more links</p> 
+                        <a href="#" style="color: #0395FF; font-size: 14px; font-weight: 400;">Back to top</a>
+                      }
+                    </div>
+                  </div>
+              </div>
+              <div class="col-md-3"></div>
+            </div> 
+
+
+  <style>
+   li.active {
+      background-color:#0395FF !important;
+    }
+
+    .carousel-indicators{
+      margin-bottom: 0px !important;
+    }
+
+    /* Styles for wrapping the search box */
+
+.main {
+    width: 50%;
+    margin: 50px auto;
+}
+
+/* Bootstrap 4 text input with search icon */
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].valid, input[type="search"]:focus.valid, input[type="datetime-local"].valid, input[type="datetime-local"]:focus.valid, input[type="email"].valid, input[type="email"]:focus.valid, input[type="number"].valid, input[type="number"]:focus.valid, input[type="password"].valid, input[type="password"]:focus.valid, input[type="search-md"].valid, input[type="search-md"]:focus.valid, input[type="search"].valid, input[type="search"]:focus.valid, input[type="tel"].valid, input[type="tel"]:focus.valid, input[type="text"].valid, input[type="text"]:focus.valid, input[type="time"].valid, input[type="time"]:focus.valid, input[type="url"].valid, input[type="url"]:focus.valid, textarea.md-textarea.valid, textarea.md-textarea:focus.valid {
+    border-bottom: none;
+    box-shadow: 0 0 0 0 transparent;
+}
+    input[type="text"]:focus:not([readonly]), input[type="search"]:focus:not([readonly]),  input[type="password"]:focus:not([readonly]) {
+    border: none;
+    box-shadow: 0 0 0 0 transparent;
+}
+
+.category {
+  height: 114px; 
+  background-color:#F5F5F5;
+   border-radius: 5px; 
+   border: 1px solid rgba(196, 196, 196, 0.25); 
+   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05);  
+}
+.category.selected {
+   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);  
+}
+.category .category_dot{
+  font-size: 10px;
+  color: #DF0909;
+  visibility: hidden;
+}
+.category.selected .category_dot{
+  visibility: visible;
+}
+
+.category_header {
+  margin:0rem; 
+  margin-top: -10px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #0395FF;
+}
+.category.selected .category_header{
+  font-weight: 700;
+}
+
+.category_subheader {
+  color: #353535;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.category_subtext {
+  color: #353535;
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.post_item {
+  background-color: #F0F0F0;
+  border-radius: 5px;
+}
+
+.post_item_image {
+  border-radius: 100%; 
+  height: 40px; 
+  width: 40px;
+}
+
+.post_item_name {
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.post_item_category {
+  color: #0395FF;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.post_item_date {
+  font-size: 14px;
+  color: black;
+  font-weight: 300;
+}
+
+.post_item_subject {
+  color: #262F56;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.post_item_description_image {
+  height: 100px; 
+  width: 100px; 
+  border-radius: 5px; 
+  margin:10px;
+}
+
+.post_item_description_text {
+  text-align: left;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.post_item_link {
+  color: #0395FF;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+}
+</style>            

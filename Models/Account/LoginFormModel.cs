@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ViralLinks.Models
 {
-    public class LoginFormModel : BaseModel
+    public class LoginFormModel 
     {
         [DisplayName("Email"),Required]
         public string UsernameOrEmail { get; set; }
