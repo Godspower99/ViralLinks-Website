@@ -11,7 +11,7 @@ namespace ViralLinks.Data
     {
         public static async Task<Post> FindPost(this ApplicationDbContext dbContext, string id)
         {
-            return await dbContext.Posts.FirstOrDefaultAsync(p => p.Id == id);
+            return await dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == id);
         }
 
         public static async Task<List<Post>> GetPosts(this ApplicationDbContext dbContext, string category ="all", int amount = 10)
@@ -58,24 +58,25 @@ namespace ViralLinks.Data
             await dbContext.SaveChangesAsync();
         }
 
-        public static async Task<List<PostObjectModel>> GetPostObjectModels(this ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, string category = "all", int amount = 10)
-        {
-            var posts = new List<Post>();
-            var postCategory = await dbContext.PostCategories.FirstOrDefaultAsync(pc => pc.Id == category);
-             if(postCategory == null || category == "all")
-                posts =await dbContext.Posts.OrderByDescending(p => p.TimeStamp).Take(amount).ToListAsync();
-            else
-                posts = await dbContext.Posts.Where(p => p.CategoryId == category).OrderByDescending(p => p.TimeStamp).Take(amount).ToListAsync();
+        // public static async Task<List<PostObjectModel>> GetPostObjectModels(this ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, string category = "all", int amount = 10)
+        // {
+        //     var posts = new List<Post>();
+        //     var postCategory = await dbContext.PostCategories.FirstOrDefaultAsync(pc => pc.Id == category);
+        //      if(postCategory == null || category == "all")
+        //         posts =await dbContext.Posts.OrderByDescending(p => p.TimeStamp).Take(amount).ToListAsync();
+        //     else
+        //         posts = await dbContext.Posts.Where(p => p.CategoryId == category).OrderByDescending(p => p.TimeStamp).Take(amount).ToListAsync();
             
-            var postObjectModels = new List<PostObjectModel>();
+        //     var postObjectModels = new List<PostObjectModel>();
 
-            posts.ForEach(async p =>  {
-                postObjectModels.Add(new PostObjectModel{
-                    Post = p,
-                    User = await userManager.Users.FirstOrDefaultAsync(u => u.Id == p.UserId)
-                });
-            });
-            return postObjectModels;
-        }
+        //     posts.ForEach(async p =>  {
+        //         postObjectModels.Add(new PostObjectModel{
+        //             Post = p,
+        //             User = await userManager.Users.FirstOrDefaultAsync(u => u.Id == p.UserId)
+        //         });
+        //     });
+        //     return postObjectModels;
+        // }
+
     }
 }

@@ -30,7 +30,7 @@ namespace ViralLinks.Controllers
             this.urlGenerator = urlGenerator;
         }
 
-        [HttpGet,Route("")]
+        [HttpGet,Route(""),Route("home")]
         public async Task<IActionResult> Index([FromQuery]PaginationFilter paginationFilter, string category = "all")
         {
             var viewModel = new HomePageModel();
@@ -39,10 +39,10 @@ namespace ViralLinks.Controllers
 
             var route = HttpContext.Request.Path;
             var validFilter = new PaginationFilter(pageNumber: paginationFilter.PageNumber, pageSize: paginationFilter.PageSize);
-            var posts = await this.dbContext.GetPostObjectModels(userManager, category: category, amount: validFilter.PageNumber);
-            var postsCount = await this.dbContext.GetPostsCount(category);
 
-            viewModel.Posts = PaginationHelpers<PostObjectModel>.CreatePagedResponse(posts, validFilter,postsCount,urlGenerator,route);
+            var posts = await this.dbContext.GetPosts(category: category, amount: validFilter.PageSize);
+            var postsCount = await this.dbContext.GetPostsCount(category);
+            viewModel.Posts = PaginationHelpers<Post>.CreatePagedResponse(posts, validFilter,postsCount,urlGenerator,route);
             return View(model: viewModel);
         }
 

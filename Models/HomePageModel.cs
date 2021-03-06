@@ -7,6 +7,6 @@ namespace  ViralLinks.Models
     {
         public List<PostCategory> PostCategories { get; set; }
         public string SelectedCategory { get; set; }
-        public PagedModel<List<PostObjectModel>> Posts { get; set; }
+        public PagedModel<List<Post>> Posts { get; set; }
     }
 }

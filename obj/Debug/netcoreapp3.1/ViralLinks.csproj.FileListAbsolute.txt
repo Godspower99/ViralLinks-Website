@@ -109,5 +109,5 @@
 /home/exploit90/Desktop/ViralLinks/obj/Debug/netcoreapp3.1/Razor/Views/Shared/temp.cshtml.g.cs
 /home/exploit90/Desktop/ViralLinks/obj/Debug/netcoreapp3.1/Razor/Views/Account/Profile.cshtml.g.cs
 /home/exploit90/Desktop/ViralLinks/obj/Debug/netcoreapp3.1/Razor/Views/Account/CreatePost.cshtml.g.cs
-/home/exploit90/Desktop/ViralLinks/obj/Debug/netcoreapp3.1/Razor/Views/Account/FullPost.cshtml.g.cs
 /home/exploit90/Desktop/ViralLinks/obj/Debug/netcoreapp3.1/Razor/Views/Home/MembershipDescription.cshtml.g.cs
+/home/exploit90/Desktop/ViralLinks/obj/Debug/netcoreapp3.1/Razor/Views/Posts/FullPost.cshtml.g.cs

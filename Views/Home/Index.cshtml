@@ -3,8 +3,9 @@
     ViewBag.Title = "Feeds for you";
     var request = Context.Request;
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
-    ViewBag.BackgroundColor = "White";
+    ViewBag.BackgroundColor = "#F5F5F5";
     var userIsAuthorized = Context.User.Identity.IsAuthenticated;
+    var postItemIconClass = userIsAuthorized? "col-2" : "col-4 text-center";
 }
 
             <!--Top Texts-->
@@ -260,82 +261,94 @@
                   <!-- Posts Header -->
                   <div class="row pb-2" style="margin-left: 1px;">
                     <div class="col-12">
-                      <p class="text-left float-left pl-4" style="color: black; font-size: 16px; margin-left: 10px; font-weight: 400;">Feeds for you (@Model.Posts.TotalRecords)</p>
+                      <p class="text-left float-left pl-4" style="color: black; font-size: 16px; margin-left: 10px; font-weight: 400;">Feeds for you (@Model.Posts.TotalRecords.GetPostsCount())</p>
                     </div> 
 
                   </div>
 
-                  <!-- Post Objects -->
-                  <div class="row" style="margin-left: 1px;">
-                    
-                    <!-- First Post -->
+                  <!-- Post Objects --> 
                     @foreach (var post in Model.Posts.Body)
                     {
-                    <div class="col-12 p-0 pl-4 pr-2 pb-2">
-                      <div class="post_item" style="height: 306px;">
-                        <div class="container">
-                          <div class="row pt-3">
+                  <div class="row pb-2 post_item" style="margin-left: 1px;">
                             <!--Image and name-->
                             <div class="col-12">
-                              <img class="float-left post_item_image" src="@baseUri/avatar.png">
-                              <p class="float-left pl-3 pt-2 post_item_name" style="text-transform: capitalize;">@post.User.UserName<br> <span class="post_item_category">.@post.Post.CategoryId</span></p>
-                              <p class="float-right pr-3 pt-2 post_item_date">@post.Post.TimeStamp.ToShortDateString()</p>
+                              <img class="float-left post_item_image" src="@post.UserImageURI" style="width:50px; height: 50px;">
+                              <p class="float-left pl-3 pt-2 post_item_name" style="text-transform: capitalize;">@post.Username<br> <span class="post_item_category">.@post.CategoryHeader</span></p>
+                              <p class="float-right pr-3 pt-2 post_item_date">@post.TimeStamp.GetTimeAgo()</p>
                             </div> 
                             <!--Subject-->
                             <div class="col-12">
-                              <p class="pl-3 pt-0 post_item_subject">@post.Post.Subject</p>
+                              <a href="@baseUri/posts/@post.PostId" class ="pl-3 pt-0"><p class= post_item_subject">@post.Subject</p></a>
                             </div>      
                             <!--Description--> 
                             <div class="col-12 text-center" style="height: max-content;">
-                              <img class="post_item_description_image float-left" src="@baseUri/virallinks-text.png" style="height: 90px; width: 100px;">
-                              <p class="pt-2 post_item_description_text">@post.Post.Description...</p>
+                              <img class="post_item_description_image float-left" src="@post.ImageURI" style="height: 90px; width: 100px;">
+                              <p class="pt-2 post_item_description_text">@post.Description</p>
                             </div>
                             <!--Link-->
                             <div class="col-12 text-center pt-0">
-                              <a href="@post.Post.PostLink">
-                               <p class="post_item_link"> @post.Post.PostLink</p>
+                              <a href="@post.PostLink" target="_blank">
+                               <p class="post_item_link">@post.PostLink</p>
                               </a>
                             </div>                      
                             <!-- icons -->              
                             <div class="col-12 pt-2 pb-4">
                               <div class="container pl-4">
                                 <div class="row">
+                                  <!-- Views -->
                                   <div class="col-4 p-0 pl-5">
                                     <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye"></i> 187</p>
                                   </div>
-                                  <div class="col-2 p-0">
-                                    <p style="font-size: 16px;"><i class="fa fa-comments" style="color:#0395FF;"></i> 5</p>
+                                  <!-- Comments -->
+                                  <div class="comments-icon @postItemIconClass p-0">
+                                    <p style="font-size: 16px;"><i class="fa fa-comments"></i> 5</p>
                                   </div>
-                                  <div class="col-2 p-0">
-                                    <p style="font-size: 16px;"><i class="fa fa-certificate" style="color: #262F56;"></i> 24</p>
+                                  <!-- liked -->
+                                  <div class="likes-icon @postItemIconClass p-0">
+                                    <p style="font-size: 16px;"><i class="fa fa-certificate"></i> 24</p>
                                   </div>
-                                  <div class="col-2">
-                                    <p style="font-size: 16px;"><i class="material-icons" style="color: #0395FF;">turned_in_not</i></p>
-                                  </div>
-                                  <div class="col-2">
-                                    <p style="font-size: 16px;"><i class="fa fa-ellipsis-v" style="color: #0395FF;"></i></p>
-                                  </div>
+                                 @if(userIsAuthorized)
+                                 {
+                                    <!-- save post -->
+                                    <div class="@postItemIconClass">
+                                      <p style="font-size: 16px;"><i class="material-icons">turned_in_not</i></p>
+                                    </div>
+                                    <!-- menu -->
+                                    <div class="@postItemIconClass">
+                                      <p style="font-size: 16px;"><i class="fa fa-ellipsis-v" style="color: #0395FF;"></i></p>
+                                    </div>
+                                 }
                                 </div>
                               </div>
                             </div>
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>  
-                    }                                     
-
                   </div>
-
+                    }                                     
                   <!-- Posts Footer -->
                   <div class="row pb-2" style="margin-left: 1px;">
                     <div class="col-12 text-center">
                       <!-- no posts -->
                       @if(Model.Posts.TotalRecords == 0)
                       {
-                        <p class="p-0" style="font-size: 14px; color: black; font-weight: 400;">You have no more links</p> 
+                        <p class="p-0" style="font-size: 14px; color: black; font-weight: 400;">No links here</p> 
                         <a href="#" style="color: #0395FF; font-size: 14px; font-weight: 400;">Back to top</a>
                       }
+                      <!-- Next and previous Page Available -->
+                      @if(Model.Posts.PreviousPage != null && Model.Posts.NextPage != null)
+                      {
+                        <a href="@Model.Posts.PreviousPage" class="float-left" style="color: #0395FF; font-size: 14px; font-weight: 400;">Prev</a>
+                        <a href="@Model.Posts.NextPage" class="float-right" style="color: #0395FF; font-size: 14px; font-weight: 400;">Next</a>
+                      }
+                      <!-- Prev page null and Next page available -->
+                      @if(Model.Posts.PreviousPage == null && Model.Posts.NextPage != null)
+                      {
+                        <a href="@Model.Posts.NextPage" class="float-right" style="color: #0395FF; font-size: 14px; font-weight: 400;">Next</a>
+                      }
+                      <!-- Prev page is available no next page -->
+                      @if(Model.Posts.PreviousPage != null && Model.Posts.NextPage == null)
+                      {
+                        <a href="@Model.Posts.PreviousPage" class="float-left" style="color: #0395FF; font-size: 14px; font-weight: 400;">Prev</a> 
+                      }
+
                     </div>
                   </div>
               </div>
@@ -431,6 +444,8 @@ input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].v
 .post_item {
   background-color: #F0F0F0;
   border-radius: 5px;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
 }
 
 .post_item_image {
@@ -462,6 +477,9 @@ input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].v
   font-size: 16px;
   font-weight: 400;
 }
+.post_item_subject:hover {
+  color:##0395FF;
+}
 
 .post_item_description_image {
   height: 100px; 
@@ -473,7 +491,12 @@ input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].v
 .post_item_description_text {
   text-align: left;
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
 }
 
 .post_item_link {
@@ -481,5 +504,26 @@ input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].v
   font-size: 16px;
   font-weight: 400;
   font-style: italic;
+    overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
 }
+.post_item_link:hover{
+  text-decoration: underline;
+}
+
+.comments-icon{
+  color: #0395FF;
+}
+
+.likes-icon{
+  color:#262F56;
+}
+
+.save-icon{
+  color:#0395FF;
+}
+
 </style>            

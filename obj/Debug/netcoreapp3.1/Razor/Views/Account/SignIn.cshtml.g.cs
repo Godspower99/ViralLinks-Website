@@ -26,8 +26,15 @@ using ViralLinks.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 3 "/home/exploit90/Desktop/ViralLinks/Views/_ViewImports.cshtml"
+using ViralLinks.Data;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"0a7db98c739529e2d2e6c37baccc60567af93838", @"/Views/Account/SignIn.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"2aba3b9d317424b6530c86e0296c64516c3ff632", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"1bb1d19b31b6ee331a1c1a3d801e945521669a2e", @"/Views/_ViewImports.cshtml")]
     public class Views_Account_SignIn : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<LoginFormModel>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("type", "text", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -97,7 +104,7 @@ using ViralLinks.Models;
 
             <!-- Login FOrm -->
             ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0a7db98c739529e2d2e6c37baccc60567af938388453", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0a7db98c739529e2d2e6c37baccc60567af938388611", async() => {
                 WriteLiteral(@"
                 <!--Email or Username-->
                 <div class=""row pt-5"">
@@ -109,7 +116,7 @@ using ViralLinks.Models;
                             <div class=""row"">
                                 <div class=""col-12"">
                                     ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "0a7db98c739529e2d2e6c37baccc60567af938389372", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "0a7db98c739529e2d2e6c37baccc60567af938389530", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper>();
@@ -154,7 +161,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper.For = ModelExpressionProvid
                             <div class=""row"">
                                 <div class=""col-10"">
                                     ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "0a7db98c739529e2d2e6c37baccc60567af9383812398", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "0a7db98c739529e2d2e6c37baccc60567af9383812556", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper>();
@@ -196,7 +203,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper.For = ModelExpressionProvid
                     <div class=""col-md-6 text-center"" style=""color: #989898;margin-left: 1rem;margin-right: 1rem;"">
                         <p>
                             Not yet a member? ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0a7db98c739529e2d2e6c37baccc60567af9383815108", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0a7db98c739529e2d2e6c37baccc60567af9383815266", async() => {
                     WriteLiteral(" Sign up here ");
                 }
                 );
@@ -238,7 +245,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper.For = ModelExpressionProvid
                         <p>
                    ");
                 WriteLiteral("        ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0a7db98c739529e2d2e6c37baccc60567af9383817707", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0a7db98c739529e2d2e6c37baccc60567af9383817865", async() => {
                     WriteLiteral(" forgot password ");
                 }
                 );

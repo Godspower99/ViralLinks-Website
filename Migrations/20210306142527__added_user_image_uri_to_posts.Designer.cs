@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ViralLinks.Data;
 
 namespace ViralLinks.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210306142527__added_user_image_uri_to_posts")]
+    partial class _added_user_image_uri_to_posts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,9 +221,6 @@ namespace ViralLinks.Migrations
                 {
                     b.Property<string>("PostId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CategoryHeader")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CategoryId")
                         .HasColumnType("nvarchar(max)");

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ViralLinks.Data;
 
 namespace ViralLinks.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210306140448_updated_posts_model_to_contain_user_information")]
+    partial class updated_posts_model_to_contain_user_information
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,9 +222,6 @@ namespace ViralLinks.Migrations
                     b.Property<string>("PostId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CategoryHeader")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CategoryId")
                         .HasColumnType("nvarchar(max)");
 
@@ -242,9 +241,6 @@ namespace ViralLinks.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserImageURI")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")

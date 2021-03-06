@@ -14467,6 +14467,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Posts/FullPost.cshtml",
+      "TargetPath": "Views\\Posts\\FullPost.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Account/ResetPasswordCompleted.cshtml",
       "TargetPath": "Views\\Account\\ResetPasswordCompleted.cshtml",
       "FileKind": "mvc"
@@ -14474,11 +14479,6 @@
     {
       "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Home/Privacy.cshtml",
       "TargetPath": "Views\\Home\\Privacy.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Account/FullPost.cshtml",
-      "TargetPath": "Views\\Account\\FullPost.cshtml",
       "FileKind": "mvc"
     }
   ],
