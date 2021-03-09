@@ -2,10 +2,13 @@ using ViralLinks.Data;
 
 namespace ViralLinks.Models
 {
-    public class ProfileModel
+    public class ProfileModel : BasePageModel
     {
-        public ApplicationUser User { get; set; }
-        public string ProfilePicture { get; set; }
-        
+
+        public ProfileModel(){}
+        public ProfileModel(ApplicationUser user):base(user){}
+        public ProfileModel(string profilePicture):base(profilePicture){}
+        public ProfileModel(ApplicationUser user, string profilePicture):base(user,profilePicture){}
+
     }
 }

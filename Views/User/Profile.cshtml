@@ -2,11 +2,14 @@
 @model ProfileModel;
 
 @{
-    ViewBag.Title = "Profile page";
+    ViewBag.Title = Model.User.UserName;
     ViewBag.Background = "#F5F5F5";
     var request = Context.Request;
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
     var role = Context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+    var userRole = role == Roles.Member ? "Regular member" : role == Roles.VIP ? "VIP member" :
+        role == Roles.Admin ? "Admin" : "Guest";
+    var upgradeText = role == Roles.Member ? "Upgrade to VIP" : "";
 }
 
     <!-- profile picture upload -->
@@ -59,7 +62,7 @@
                     <div class="col-6 col-md-5 text-left form-control" style="color: #000000;margin-left: 2rem;
                         border-top-width: 1px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
                         padding-bottom: 3rem;font-size: 14px; font-weight: 400">
-                        <p class="pt-2 pl-2">@role</p>
+                        <p class="pt-2 pl-2">@userRole</p>
                     </div>
                     <div class="col-4 col-md-3 text-center form-control" style="color: #505050;margin-right: 2rem;
                         border-top-width: 1px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
@@ -112,9 +115,9 @@
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
                         padding-bottom: 3rem;font-size: 14px; font-weight: 400;height: 120px;" class="col-9 col-md-7 text-left form-control">
                         <p style="font-weight: 500" class="pt-3 pl-2">Account Details</p>
-                        <p class="pl-2 pt-1">Bank: First Bank of Nigeria</p>
-                        <p class="pl-2">Account Number: 123456789</p>
-                        <p class="pl-2">Account Name: Otiete Godspower</p>
+                        <p class="pl-2 pt-1">Bank: @Model.User.Bank</p>
+                        <p class="pl-2">Account Number: @Model.User.AccountNumber</p>
+                        <p class="pl-2">Account Name: @Model.User.AccountName</p>
                     </div>
                     <div style="color: #0395FF;margin-right: 0rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
@@ -154,9 +157,9 @@
     <div class="row pt-3">
         <div class="col-md-3"></div>
         <div class="col-md-6 text-center" style="color: #989898;margin-left: 1rem;margin-right: 1rem;">
-            <button class="btn pt-1" type="submit" style="color: #E0E0E0 !important; background-color: #0395FF;width: 166px;height: 32px;border-radius: 15px;font-size: 18px;font-weight: 400;"> 
+            <a href="@baseUri/posts/create-post" class="btn pt-1" style="color: #E0E0E0 !important; background-color: #0395FF;width: 166px;height: 32px;border-radius: 15px;font-size: 18px;font-weight: 400;"> 
                 Create a Post
-            </button>
+            </a>
         </div>
         <div class="col-md-3"></div>
     </div>

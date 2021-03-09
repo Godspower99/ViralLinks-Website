@@ -1,5 +1,9 @@
-﻿@{
+﻿@model BasePageModel
+@{
   var background = string.IsNullOrWhiteSpace(ViewBag.BackgroundColor) ? "#F0F0F0" : $"{ViewBag.BackgroundColor}";
+  var request = Context.Request;
+  var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+  var userIsAuthorized = Context.User.Identity.IsAuthenticated;
 }
 
 
@@ -38,42 +42,54 @@
           <!--Navbar-->
           <nav class="row navbar fixed-top pb-0" style="box-shadow: none; background-color: #E5E5E5;">
             <div class="col-12">
-                <div class="container">
-                    <div class="row w-100">
-                        <div class="col-2 p-0 pt-1">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-12 text-center">
-                                        <a class="navbar-brand" asp-controller="home" asp-action="index" style="width:max-content;">
-                                            <img alt="logo" src="~/virallinks-logo.png" style="width: 3rem;"/>   
-                                        </a>
-                                    </div>
-                                    <div class="col-12 text-center pt-2" style="padding: 0rem;">
-                                      <a id="NavMenuBar" class="navbar-brand nabMenuBar"><i class="fa fa-bars"></i> </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-10 p-0">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h3 style="color: #0395FF; font-size: 24px; line-height:28.13px; font-weight:400;">VIRALLINKS FORUM</h3>
-                                    </div>
-                                    <div class="col-12 pt-2">
-                                        <p style="text-transform: capitalize; color:#262F56; font-size:12px; line-height:20px; font-weight:300; margin-bottom:0.2rem;">One link to rule them all!</p>
-                                        <p style="text-transform: capitalize; color:#262F56; font-size:12px; font-weight:300; line-height: 0.9rem;">
-                                            Post your links and go viral. get results, reap rewards.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+              <div class="container-fluid p-0">
+                <div class="col-md-2 p-0 col-sm-0"></div>
+                <div class="col-md-8 p-0 col-sm-12">
+                  <div class="float-left pb-2 pl-4 text-center">
+                    <div class="pb-2">
+                      <a class="navbar-brand" asp-controller="home" asp-action="index" style="width:max-content;">
+                        <img alt="logo" src="~/virallinks-logo.png" style="width: 3.5rem;"/>   
+                      </a>
                     </div>
-                </div>                    
+                    <div class="text-center">
+                      <a id="NavMenuBar" class="navbar-brand nabMenuBar"><i class="fa fa-bars" style="font-size: 2.3rem;"></i> </a>
+                    </div>
+                  </div>
+                  <div class="float-right pt-3">
+                    @if(!userIsAuthorized)
+                    {
+                      <a asp-controller="Account" asp-action="SignIn">
+                        <img class="post_item_image" src="@baseUri/avatar.png" style="width:4rem; height: 4rem;">
+                          <p style="color: #262F56;">Sign in</p>
+                      </a>
+                    }
+                    @if(userIsAuthorized)
+                    {
+                      <a asp-controller="User" asp-action="Profile">
+                        <img class="post_item_image" src="@Model.ProfilePicture" style="width: 4rem; height: 4rem; border-radius:100%;">
+                      </a>
+                      <a asp-controller="Account" asp-action="SignOut">
+                          <p class="icon-text pt-1" style="color: #262F56;">Sign out</p>
+                      </a>
+                    }
+                  </div>
+                  <div>
+                    <div class="pt-3">
+                      <h3 style="color: #0395FF; font-size: 24px; line-height:28.13px; font-weight:400;">VIRALLINKS FORUM</h3>
+                    </div>
+                    <div class="pt-2">
+                      <p style="text-transform: capitalize; color:#262F56; font-size:12px; line-height:20px; font-weight:300; margin-bottom:5px;">One link to rule them all!</p>
+                      <p style="text-transform: capitalize; color:#262F56; font-size:12px; font-weight:300; line-height: 0.9rem;">
+                        Post your links and go viral. get results, reap rewards.
+                      </p>
+                    </div>
+                  </div>            
+                </div>
+                <div class="col-md-2 p-0 col-sm-0"></div>
+              </div>
             </div>
-            <div class="col-12" style="background-color: #0395FF; height:5px;">
-            </div>
+              
+            <div class="col-12" style="background-color: #0395FF; height:5px;"></div>
           </nav>        
 
           <div class="row">
@@ -148,7 +164,7 @@
                             
                             <!-- Membership -->
                             <div class="col-12 p-0">
-                              <a asp-controller="Home" asp-action="MembershipDescription">
+                              <a asp-controller="Account" asp-action="MembershipDescription">
                                 <div class="float-left text-center" style="height: 35px; background-color: #0395FF; border-radius: 100%; width: 35px;">
                                 <i class="material-icons text-white" style="font-size: 25px; padding-top: 5px;">supervisor_account</i>
                               </div>
@@ -194,13 +210,11 @@
                 </div>
               </div>
                 <div id="ContentOverlayID"  class="ContentOverlayClose"></div>
-                <div style="margin-top: 130px">
+                <div class="pl-3" style="margin-top: 10rem">
                     @RenderBody()
                 </div>
             </div>
-          </div>
-        
-            
+          </div>    
         </div>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -234,8 +248,20 @@
                 ContentOverlayID.addClass('ContentOverlayClose')
             }
         }
-    
     </script>
-    
     </body>
+
+    <style>
+      .icon-text{
+        color: #262F56;
+        font-weight: 400;
+        font-size: 14px;
+        text-align: center;
+        cursor:pointer;
+      }
+      .icon-text:hover{
+        font-size: 16px;
+        text-decoration: underline;
+      }
+    </style>
 </html>

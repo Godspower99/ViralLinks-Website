@@ -1,6 +1,6 @@
 ﻿@model HomePageModel
 @{
-    ViewBag.Title = "Feeds for you";
+    ViewBag.Title = "Home";
     var request = Context.Request;
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
     ViewBag.BackgroundColor = "#F5F5F5";
@@ -282,8 +282,8 @@
                             </div>      
                             <!--Description--> 
                             <div class="col-12 text-center" style="height: max-content;">
-                              <img class="post_item_description_image float-left" src="@post.ImageURI" style="height: 90px; width: 100px;">
-                              <p class="pt-2 post_item_description_text">@post.Description</p>
+                              <a class="float-left" href="@baseUri/posts/@post.PostId"><img class="post_item_description_image" src="@post.ImageURI" style="height: 90px; width: 100px;"></a>
+                              <a href="@baseUri/posts/@post.PostId" class="pt-2"><p class="post_item_description_text">@post.Description</p></a>
                             </div>
                             <!--Link-->
                             <div class="col-12 text-center pt-0">
@@ -478,7 +478,7 @@ input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].v
   font-weight: 400;
 }
 .post_item_subject:hover {
-  color:##0395FF;
+  color:#0395FF;
 }
 
 .post_item_description_image {

@@ -14392,8 +14392,8 @@
   "RootNamespace": "ViralLinks",
   "Documents": [
     {
-      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Home/MembershipDescription.cshtml",
-      "TargetPath": "Views\\Home\\MembershipDescription.cshtml",
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Posts/FullPostGuest.cshtml",
+      "TargetPath": "Views\\Posts\\FullPostGuest.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14422,8 +14422,13 @@
       "FileKind": "mvc"
     },
     {
-      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Account/Profile.cshtml",
-      "TargetPath": "Views\\Account\\Profile.cshtml",
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Shared/_AccountLayout.cshtml",
+      "TargetPath": "Views\\Shared\\_AccountLayout.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Home/IndexMember.cshtml",
+      "TargetPath": "Views\\Home\\IndexMember.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14432,13 +14437,13 @@
       "FileKind": "mvc"
     },
     {
-      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Account/CreatePost.cshtml",
-      "TargetPath": "Views\\Account\\CreatePost.cshtml",
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Home/indexGuest.cshtml",
+      "TargetPath": "Views\\Home\\indexGuest.cshtml",
       "FileKind": "mvc"
     },
     {
-      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Home/Index.cshtml",
-      "TargetPath": "Views\\Home\\Index.cshtml",
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/User/Profile.cshtml",
+      "TargetPath": "Views\\User\\Profile.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14449,6 +14454,11 @@
     {
       "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Shared/_ValidationScriptsPartial.cshtml",
       "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Posts/CreatePost.cshtml",
+      "TargetPath": "Views\\Posts\\CreatePost.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14464,6 +14474,16 @@
     {
       "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Account/ForgotPassword.cshtml",
       "TargetPath": "Views\\Account\\ForgotPassword.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Account/MembershipDescription.cshtml",
+      "TargetPath": "Views\\Account\\MembershipDescription.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "/home/exploit90/Desktop/ViralLinks/Views/Shared/_GuestLayout.cshtml",
+      "TargetPath": "Views\\Shared\\_GuestLayout.cshtml",
       "FileKind": "mvc"
     },
     {

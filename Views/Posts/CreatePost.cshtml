@@ -1,3 +1,4 @@
+@model CreatePostModel
 @{
     ViewBag.Title = "Create Post";
     var request = Context.Request;
@@ -18,18 +19,18 @@
             </div>
 
             <!-- Login Form -->
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data" asp-action="CreatePost" asp-controller="Posts">
 
                 <!--Subject-->
                 <div class="row pt-4">
                     <div class="col-md-3"></div>
                     <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
-                        padding-bottom: 3rem;font-size: 18px;">
+                        padding-bottom: 1rem;font-size: 18px;">
                         <div class="container">
                             <div class="row">
                                 <div class="col-12">
-                                    <input type="text" autofocus placeholder=" Subject" style="font-size:18px; font-weight:400; border: none;"/>
+                                    <input oninput="OnSubjectInput()" asp-for="Subject" type="text" maxlength="80" autofocus placeholder=" Subject" style="font-size:18px; font-weight:400; border: none;"/>
                                 </div>
                             </div>
                         </div>
@@ -43,7 +44,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-12 text-right">
-                                    <p style="font-size:14px; font-weight:400; border: none;">0/20</p>
+                                    <p id="subjectCount" style="font-size:14px; font-weight:400; border: none;">0/20</p>
                                 </div>
                             </div>
                         </div>
@@ -56,11 +57,11 @@
                     <div class="col-md-3"></div>
                     <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
-                        padding-bottom: 3rem;font-size: 18px;">
+                        padding-bottom: 1rem;font-size: 18px;">
                         <div class="container">
                             <div class="row">
                                 <div class="col-12">
-                                    <textarea type="text" placeholder=" Description" style="font-size:18px; font-weight:400; border: none;"></textarea>
+                                    <textarea asp-for="Description" maxlength="200" type="text" placeholder=" Description" style="font-size:18px; font-weight:400; border: none;"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +75,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-12 text-right">
-                                    <p style="font-size:14px; font-weight:400; border: none;">0/200</p>
+                                    <p style="font-size:14px; font-weight:400; border: none;">@Model.DescriptionCount/200</p>
                                 </div>
                             </div>
                         </div>
@@ -87,11 +88,11 @@
                     <div class="col-md-3"></div>
                     <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
-                        padding-bottom: 3rem;font-size: 18px;">
+                        padding-bottom: 1rem;font-size: 18px;">
                         <div class="container">
                             <div class="row">
                                 <div class="col-12">
-                                    <input type="text" placeholder=" Insert link" style="font-size:18px; font-weight:400; border: none;"/>
+                                    <input asp-for="Link" type="text" placeholder=" Insert link" style="font-size:18px; font-weight:400; border: none;"/>
                                 </div>
                             </div>
                         </div>
@@ -106,17 +107,18 @@
                         padding-bottom: 3rem;font-size: 18px;">
                         <div class="container">
                             <div class="row">
-                                <div class="col-12">
+                                <input id="photo-input" type="file" asp-for="ProfilePicture" />
+                                @* <div id="upload-button" class="col-12">
                                     <p class="float-left" style="font-size:18px">Upload image</p> 
                                     <i class="material-icons pl-1" style="font-size: 24px;">vertical_align_top</i>
-                                </div>
+                                    <p id="profile-picture"></p>
+                                </div> *@
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3"></div>
                 </div>
                 
-
                 <!-- Login button -->
                 <div class="row pt-0">
                     <div class="col-md-3"></div>
@@ -162,3 +164,31 @@
         -webkit-transition-timing-function:linear;    
     }
 </style>
+
+<!-- Upload picture script -->
+<script defer>
+
+    var upload_button = document.getElementById('upload-button');
+    var photo_input = document.getElementById('photo-input');
+    var photo = document.getElementById("profile-picture");
+
+     var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+            }
+            reader.readAsDataURL(input.files[0]);
+            alert(e.target.files[0].name);
+
+        }
+    }
+
+    photo_input.onchange = function(e){
+        readURL(this);
+    }
+
+    upload_button.onclick = function(e) {
+        photo_input.click();
+    };
+
+</script>

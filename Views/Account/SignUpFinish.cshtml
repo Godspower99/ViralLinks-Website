@@ -1,6 +1,7 @@
 @model SignUpFormPart2Model;
 
 @{
+    Layout = "_AccountLayout";
     ViewBag.Title = "Sign up ";
     var request = Context.Request;
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
@@ -24,6 +25,7 @@
                 <input hidden asp-for="ReferralID"/>
                 <input hidden asp-for="Username"/>
                 <input hidden asp-for="Email"/>
+                <input hidden asp-for="ID"/>
 
                 <!-- profile picture upload -->
                 <div class="row pt-1">
@@ -174,7 +176,6 @@
      var readURL = function(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-
             reader.onload = function (e) {
                 photo.style.backgroundImage ="url(" + e.target.result + ")";
             }

@@ -1,6 +1,7 @@
 @model SignUpFormPart1Model;
 
 @{
+    Layout = "_AccountLayout";
     ViewBag.Title = "Sign up ";
     var request = Context.Request;
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());

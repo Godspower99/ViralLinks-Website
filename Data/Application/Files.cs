@@ -3,33 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ViralLinks.Data
 {
-    public class ProfilePicture
+    public class FileMetaData
     {
         [Key]
-        public string UserID { get; set; }
+        public string Id { get; set ;}
+        public string URI { get; set; }
+        public string Name { get; set; }
         public string Extension { get; set; }
         public DateTime LastUpdate { get; set; }
-    }
-
-    public class Media
-    {
-        [Key]
-        public Guid ID { get; set;}
-        public string UserID { get; set; }
-        public string BlobUrl { get; set; }
-        public string MediaType { get; set; }
-    }
-
-    public class MediaThumbnail
-    {
-        public Guid ID { get; set; }
-        public string MediaID { get; set; }
-        public string BlobUrl { get; set; }
-    }
-
-    public enum MediaType
-    {
-        image,
-        video
     }
 }

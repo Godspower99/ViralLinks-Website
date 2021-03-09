@@ -1,3 +1,4 @@
+using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System;
 using System.Net.Http;
@@ -39,6 +40,12 @@ namespace ViralLinks.Controllers
                 throw new ArgumentNullException(nameof(fileSystemService));
         }
 
+        [HttpGet, Route("membership-description"),AllowAnonymous]
+        public ActionResult MembershipDescription()
+        {
+            return View();
+        }
+
         /// <summary>
         /// Email input validation for sign-up form
         /// </summary>
@@ -73,6 +80,7 @@ namespace ViralLinks.Controllers
             return Json(true);
         }
 
+
         [HttpGet, Route("sign-up/start"),Route("sign-up")]
         public ActionResult SignUpStart(string referral_id)
         {
@@ -89,27 +97,25 @@ namespace ViralLinks.Controllers
                 Log.Warning("Model state is invalid");
                 return View(firstForm);
             }
-            var firstSignUpForm = new SignUpForm(firstForm);
-
-            // try update signup form if one exists
-            if(await dbContext.SignUpForms.AnyAsync(f => f.ID == firstSignUpForm.ID))
-            {
-                dbContext.SignUpForms.Update(firstSignUpForm);
-            }
-            // create new sign up form
-            else
-            {
-                await dbContext.SignUpForms.AddAsync(firstSignUpForm);
-            }
+            var signUpForm = new SignUpForm(firstForm);
+            await dbContext.SignUpForms.AddAsync(signUpForm);
             Log.Information("Going to sign-up page 2");
             await dbContext.SaveChangesAsync();
-            return RedirectToAction(actionName: "SignUpFinish", controllerName: "Account", routeValues: firstForm);
+            return RedirectToAction(actionName: "SignUpFinish", controllerName: "Account", routeValues: new {id = signUpForm.ID});
         }
 
         [HttpGet, Route("sign-up/finish")]
-        public ActionResult SignUpFinish(SignUpFormPart1Model firstForm)
+        public async Task<IActionResult> SignUpFinish(string id)
         {
-            var finalSignUpForm = new SignUpFormPart2Model(firstForm);
+            var signUpForm = await dbContext.SignUpForms.FirstOrDefaultAsync(f => f.ID == id);
+            
+            // redirect to signup start if no form is found
+            if(signUpForm == null)
+            {
+                Console.WriteLine("No form");
+                return RedirectToAction(actionName: "SignUpStart", controllerName:"Account");
+            }
+            var finalSignUpForm = new SignUpFormPart2Model(signUpForm);
             return View(model:finalSignUpForm);
         }
 
@@ -138,9 +144,18 @@ namespace ViralLinks.Controllers
 
             // update profile picture
             Log.Information("Uploading Profile Picture");
-            await fileSystemService.UpdateProfilePicture(registereduser,finalForm.ProfilePicture);
+            if(finalForm.ProfilePicture == null)
+            {
+                Console.WriteLine("Avatar");
+                var avatarFile = "./wwwroot/avatar.png";
+                var fileStream = new FileStream(avatarFile,FileMode.Open);
+                await fileSystemService.UpdateProfilePicture(registereduser,fileStream,"avatar",".png");
+            }
+            else {
+                Console.WriteLine("File {0}", finalForm.ProfilePicture.FileName);
+                await fileSystemService.UpdateProfilePicture(registereduser,finalForm.ProfilePicture);
+            }    
            // await comms.SendWelcomeEmail(registereduser, Request.Host.ToUriComponent());
-            Log.Information($"profile Picture :: {finalForm.ProfilePicture.FileName}");
             // TODO :: SEND ACCOUNT VERIFICATION EMAIL
             // TODO :: FIX IN AFFLIATE REGISTRATION
 
@@ -149,8 +164,10 @@ namespace ViralLinks.Controllers
             return Redirect(url);
         }
 
+        
+        
         [HttpGet, Route("sign-in")]
-        public async Task<ActionResult> SignIn()
+        public async Task<ActionResult> SignIn(string redirectUrl = "/home/member")
         {
             // re-direct already authenticated user
             if(User.Identity.IsAuthenticated)
@@ -159,12 +176,12 @@ namespace ViralLinks.Controllers
                 if(user == null)
                 {
                     await signInManager.SignOutAsync();
-                    return Redirect("/account/sign-in");
+                    return RedirectToAction(actionName:"SignIn", controllerName:"Account");
                 }
-
-                // TODO :: SEND USER TO CATEGORY PAGE (HOMEPAGE)
+                return RedirectToAction(actionName:"IndexMember",controllerName:"Home");
             }
             var loginForm = new LoginFormModel();
+            loginForm.RedirectUrl = redirectUrl;
             return View(loginForm);
         }
 
@@ -174,7 +191,6 @@ namespace ViralLinks.Controllers
             // validate form input
             if(!ModelState.IsValid)
             {
-                Log.Warning("Invalid Login form");
                 return View(loginForm);
             }
             // try find user by email
@@ -195,24 +211,21 @@ namespace ViralLinks.Controllers
                 Log.Warning("password validation failed");
                 return View(loginForm);
             }
-            var result = await SignInUser(user);
-            // signin user
-            if(result != string.Empty)
-            {
-                return Redirect(result);
-            }
-            Log.Warning("Complete login failure");
-            return View(loginForm);
+            await SignInUser(user);
+            return Redirect(loginForm.RedirectUrl);
         }
+
 
         [HttpGet]
         [Route("sign-out")]
         public async Task<ActionResult> SignOut()
         {
             await signInManager.SignOutAsync();
-            return Redirect("/home");
+            return RedirectToAction(actionName:"IndexGuest",controllerName:"Home");
         }
 
+        
+        
         [HttpPost,Route("forgot-password")]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordFormModel form)
         {
@@ -243,6 +256,8 @@ namespace ViralLinks.Controllers
             return View(resetForm);
         }
 
+        
+        
         [HttpPost,Route("reset-password")]
         public async Task<ActionResult> ResetPassword(PasswordResetFormModel form)
         {
@@ -294,22 +309,6 @@ namespace ViralLinks.Controllers
         }
 
 
-        [HttpGet, Route("profile"),Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
-        public async Task<ActionResult> Profile()
-        {
-            var user = await userManager.GetUserAsync(HttpContext.User);
-            var viewModel = new ProfileModel();
-            viewModel.User = user;
-            return View(model: viewModel);
-        }
-
-
-        [HttpGet, Route("create-post")]
-        public ActionResult CreatePost()
-        {
-            return View();
-        }
-
         [HttpGet, Route("full-post")]
         public ActionResult FullPost()
         {
@@ -334,16 +333,17 @@ namespace ViralLinks.Controllers
         }
 
         // *************** Helper Methods ***********************
-        private async Task<string> SignInUser(ApplicationUser user)
+        private async Task<string> SignInUser(ApplicationUser user,string redirectUrl = "/home/member")
         {
             var authProps = new AuthenticationProperties();
             authProps.AllowRefresh = true;
             authProps.IsPersistent = true;
             authProps.IssuedUtc = DateTime.UtcNow;
+            authProps.ExpiresUtc = DateTime.UtcNow.AddHours(3);
             await signInManager.SignInAsync(user,authProps);
 
             // TODO :: REDIRECT USER TO CATEGORY PAGE
-            return "/home";
+            return redirectUrl;
         }
     }
 }

@@ -90,6 +90,20 @@ namespace ViralLinks
                 // authenticated user authorization policy
                 config.AddPolicy(AuthorizationPolicies.AuthenticatedPolicy, policy => {
                     policy.RequireAuthenticatedUser();
+                    policy.RequireAssertion((context) => {
+                        var role_claim = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+                        if(role_claim == null)
+                        {
+                            Log.Warning("***** CLAIM Not Found *******");
+                            return false;
+                        }
+                        Console.WriteLine(role_claim.Value);
+                        if(role_claim.Value == Roles.Member || role_claim.Value == Roles.VIP || role_claim.Value == Roles.Admin)
+                        {
+                            return true;
+                        }
+                        return false;
+                    });
                 });
                 
                 // Members authorization policy
@@ -159,6 +173,7 @@ namespace ViralLinks
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

@@ -1,4 +1,5 @@
 @{
+    Layout = "_AccountLayout";
     ViewBag.Title = "Membership Description";
     var request = Context.Request;
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
@@ -46,7 +47,7 @@
                             <div class="col-1"></div>
                         </div>
                         <div class="row">
-                            <a class="pt-0 pl-1 text-right w-100 member-link" asp-controller="Home" asp-action="Index"><p style="color: #C4C4C4; font-size: 14px">Continue as a guest</p></a>
+                            <a class="pt-0 pl-1 text-right w-100 guest-link" asp-controller="Account" asp-action="SignOut"><p style="color: #262F56; font-size: 14px">Continue as a guest</p></a>
                         </div>
                     </div>
                 </div>
@@ -98,7 +99,7 @@
                             <div class="col-1"></div>
                         </div>
                         <div class="row">
-                            <a class="pt-0 pl-1 text-right w-100" asp-controller="Account" asp-action="SignIn"><p style="color: #0395FF; font-size: 14px">Sign up or Login</p></a>
+                            <a class="pt-0 pl-1 text-right w-100 member-link" asp-controller="Account" asp-action="SignIn"><p style="color: #0395FF; font-size: 14px">Sign up or Login</p></a>
                         </div>
                     </div>
                 </div>
@@ -151,7 +152,7 @@
                             <div class="col-1"></div>
                         </div>
                         <div class="row">
-                            <p style="color: #0395FF; font-size: 14px" class="pt-0 pl-1 text-right w-100">Upgrage to VIP</p>
+                            <a href="#" style="color: #0395FF; font-size: 14px" class="pt-0 pl-1 text-right w-100 vip-link">Upgrage to VIP</p>
                         </div>
                     </div>
                 </div>
@@ -161,3 +162,15 @@
     </div>
     <div class="col-md-3"></div>
 </div>
+
+<style>
+    .guest-link:hover{
+        text-decoration: underline;
+    }
+    .member-link:hover {
+        text-decoration: underline;
+    }
+    .vip-link:hover{
+        text-decoration: underline;
+    }
+</style>

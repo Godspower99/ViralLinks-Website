@@ -1,6 +1,7 @@
 @model LoginFormModel;
 
 @{
+    Layout = "_AccountLayout";
     ViewBag.Title = "Login";
     var request = Context.Request;
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
@@ -19,8 +20,9 @@
                 <div class="col-md-3"></div>
             </div>
 
-            <!-- Login FOrm -->
+            <!-- Login Form -->
             <form asp-action="SignIn" asp-controller="Account" method="POST">
+               <input asp-for="RedirectUrl" hidden>
                 <!--Email or Username-->
                 <div class="row pt-5">
                     <div class="col-md-3"></div>

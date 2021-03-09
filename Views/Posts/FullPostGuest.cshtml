@@ -1,11 +1,11 @@
 @model Post;
 
 @{
-    ViewBag.Title = "Post";
+    Layout = "_GuestLayout";
+    ViewBag.Title = Model.Subject;
     var request = Context.Request;
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
     var userIsAuthorized = Context.User.Identity.IsAuthenticated;
-    var postItemIconClass = userIsAuthorized? "col-2" : "col-4 text-center";
 }
 
             <!-- Feeds for you -->
@@ -25,11 +25,6 @@
                               <p class="float-left pl-3 pt-2 post_item_name">@Model.Username <br> <span class="post_item_category">.@Model.CategoryHeader</span></p>
                               <p class="float-right pr-3 pt-2 post_item_date">@Model.TimeStamp.GetTimeAgo()</p>
                             </div> 
-                            @* <!--Subject-->
-                            <div class="col-12">
-                              <p class="pl-3 pt-0 post_item_subject">@Model.Subject</p>
-                            </div>       *@
-                            <!--Description--> 
                             <div class="col-12 text-center" style="height: max-content;">
                               <img class="post_item_description_image" src="@Model.ImageURI" style="height: 300px; width: 80%;">
                             </div>
@@ -42,24 +37,13 @@
                                     <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye"></i> 187</p>
                                   </div>
                                   <!-- Comments -->
-                                  <div class="comments-icon @postItemIconClass p-0">
+                                  <div class="comments-icon col-4 text-center p-0">
                                     <p style="font-size: 16px;"><i class="fa fa-comments"></i> 5</p>
                                   </div>
                                   <!-- liked -->
-                                  <div class="likes-icon @postItemIconClass p-0">
+                                  <div class="likes-icon col-4 text-center p-0">
                                     <p style="font-size: 16px;"><i class="fa fa-certificate"></i> 24</p>
                                   </div>
-                                 @if(userIsAuthorized)
-                                 {
-                                    <!-- save post -->
-                                    <div class="@postItemIconClass">
-                                      <p style="font-size: 16px;"><i class="material-icons">turned_in_not</i></p>
-                                    </div>
-                                    <!-- menu -->
-                                    <div class="@postItemIconClass">
-                                      <p style="font-size: 16px;"><i class="fa fa-ellipsis-v" style="color: #0395FF;"></i></p>
-                                    </div>
-                                 }
                                 </div>
                               </div>
                             </div>

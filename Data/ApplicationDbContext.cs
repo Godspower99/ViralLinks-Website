@@ -6,8 +6,8 @@ namespace ViralLinks.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<FileMetaData> FileMetaDatas { get; set; }
         public DbSet<SignUpForm> SignUpForms { get; set; }
-        public DbSet<ProfilePicture> ProfilePictures { get; set; }
         public DbSet<PostCategory> PostCategories { get; set; }
         public DbSet<Post> Posts { get; set; }
         

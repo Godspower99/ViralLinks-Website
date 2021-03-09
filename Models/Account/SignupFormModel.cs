@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ViralLinks.Data;
 using ViralLinks.ValidationAttributes;
 
 namespace ViralLinks.Models
@@ -11,13 +12,13 @@ namespace ViralLinks.Models
         public string ReferralID { get; set; }
 
         [Display(Name = "Username"),
-        Required(ErrorMessage = "please enter a username"),
+        Required(ErrorMessage = "please enter your username"),
         Remote(action: "ValidateUsername", controller: "Account")]
         public string Username { get; set; }
         
         [Display(Name = "Email"),
         EmailAddress(ErrorMessage = "please enter e-mail address"),
-        Required(ErrorMessage = "please enter e-mail address"),
+        Required(ErrorMessage = "please enter your e-mail address"),
         Remote(action: "ValidateEmail", controller: "Account")]     
         public string Email { get; set; }
 
@@ -40,7 +41,7 @@ namespace ViralLinks.Models
         [Display(Name = "Password"),
         DataType(DataType.Password),
         Required(ErrorMessage = "8 characters min"),
-        MinLength(length: 8, ErrorMessage = "8 characters min")]
+        MinLength(length: 8, ErrorMessage= "8 characters min")]
         public string Password { get; set; }
 
         [Display(Name = "Confirm Password"),
@@ -66,13 +67,17 @@ namespace ViralLinks.Models
         AllowedExtensions(".jpg", ".png", ".jpeg")]
         public IFormFile ProfilePicture { get; set;}
 
+        [Required]
+        public string ID { get; set;}
+
         public SignUpFormPart2Model(){}
 
-        public SignUpFormPart2Model(SignUpFormPart1Model form1)
+        public SignUpFormPart2Model(SignUpForm form)
         {
-            this.ReferralID = form1.ReferralID;
-            this.Username = form1.Username;
-            this.Email = form1.Email;
+            this.ReferralID = form.ReferralID;
+            this.Username = form.Username;
+            this.Email = form.Email;
+            this.ID = form.ID;
         }
     }
 }

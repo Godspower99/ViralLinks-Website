@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,36 +63,59 @@ namespace ViralLinks.InternalServices
 
         public async Task<string> GetProfilePictureAsync(string userId)
         {
-            var profilePicture = await dbContext.ProfilePictures.FirstOrDefaultAsync(p => p.UserID == userId);
-            if(profilePicture != null)
-            {
-                // GET FROM AZURE BLOB STORAGE
-                return $"https://{AzureStorageConfig.AccountName}.blob.core.windows.net/{AzureStorageConfig.ProfilePicturesContainer}/{profilePicture.UserID}{profilePicture.Extension}";
-            }
-            return "https://localhost:5001/avatar.png";        
+            var metaData = await dbContext.FileMetaDatas.FirstOrDefaultAsync(f => f.Id == userId);
+            // GET FROM AZURE BLOB STORAGE
+            return $"https://{AzureStorageConfig.AccountName}.blob.core.windows.net/{AzureStorageConfig.ProfilePicturesContainer}/{userId}";      
         }
 
         public async Task UpdateProfilePicture(ApplicationUser user, IFormFile pictureFile)
         {
             var fileExtension = Path.GetExtension(pictureFile.FileName);
+            var fileName = Path.GetFileName(pictureFile.Name);
             using var stream = new MemoryStream();
             await pictureFile.CopyToAsync(stream);
-            await this.UploadBlob(stream, AzureStorageConfig.ProfilePicturesContainer,user.Id);
-            var profilePicture = await dbContext.ProfilePictures.FirstOrDefaultAsync(p => p.UserID == user.Id);
-            if(profilePicture != null)
+            var uri = await this.UploadBlob(stream, AzureStorageConfig.ProfilePicturesContainer,user.Id);
+            var metaData = await dbContext.FileMetaDatas.FirstOrDefaultAsync(fm => fm.Id == user.Id);
+            if(metaData != null)
             {
-                profilePicture.Extension = fileExtension;
-                dbContext.ProfilePictures.Update(profilePicture);
+                metaData.Extension = fileExtension;
+                metaData.Name = fileName;
+                dbContext.FileMetaDatas.Update(metaData);
             }
             else
             {
-                await dbContext.ProfilePictures.AddAsync(new ProfilePicture{
-                    UserID = user.Id,
+                await dbContext.FileMetaDatas.AddAsync(new FileMetaData {
+                    Id = user.Id,
                     Extension = fileExtension,
+                    LastUpdate = DateTime.Now,
+                    URI = uri,
+                    Name = fileName
                 });
             }
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task UpdateProfilePicture(ApplicationUser user, FileStream fileStream, string name, string extension)
+        {
+            var uri = await this.UploadBlob(fileStream, AzureStorageConfig.ProfilePicturesContainer,user.Id);
+            var metaData = await dbContext.FileMetaDatas.FirstOrDefaultAsync(fm => fm.Id == user.Id);
+            if(metaData != null)
+            {
+                metaData.Extension = extension;
+                metaData.Name = name;
+                dbContext.FileMetaDatas.Update(metaData);
+            }
+            else
+            {
+                await dbContext.FileMetaDatas.AddAsync(new FileMetaData {
+                    Id = user.Id,
+                    Extension = extension,
+                    LastUpdate = DateTime.Now,
+                    URI = uri,
+                    Name = name
+                });
+            }
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
