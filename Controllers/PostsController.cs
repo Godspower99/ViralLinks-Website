@@ -51,22 +51,22 @@ namespace ViralLinks
             return View(model: createPost);
         }
 
-        [HttpPost,Route("create-post"),Authorize(AuthorizationPolicies.AuthenticatedPolicy),AutoValidateAntiforgeryToken]
-        public async Task<ActionResult> CreatePost([Bind]CreatePostModel post)
-        {
-            var user = await userManager.GetUserAsync(HttpContext.User);
-            if(user == null)
-            {
-                return RedirectToAction(actionName:"SignOut",controllerName:"Account");
-            }
-            var newPost = new Post();
-            var cat = await context.FindPostCategory(post.CategoryId);
-            newPost.CategoryHeader = cat.Header;
-            newPost.CategoryId = cat.Id;
-            newPost.Subject = post.Subject;
-            newPost.Description = post.Description;
-            newPost.
-            await context.SavePost(newPost);
-        }
+        // [HttpPost,Route("create-post"),Authorize(AuthorizationPolicies.AuthenticatedPolicy),AutoValidateAntiforgeryToken]
+        // public async Task<ActionResult> CreatePost([Bind]CreatePostModel post)
+        // {
+        //     var user = await userManager.GetUserAsync(HttpContext.User);
+        //     if(user == null)
+        //     {
+        //         return RedirectToAction(actionName:"SignOut",controllerName:"Account");
+        //     }
+        //     var newPost = new Post();
+        //     var cat = await context.FindPostCategory(post.CategoryId);
+        //     newPost.CategoryHeader = cat.Header;
+        //     newPost.CategoryId = cat.Id;
+        //     newPost.Subject = post.Subject;
+        //     newPost.Description = post.Description;
+        //     newPost.
+        //     await context.SavePost(newPost);
+        // }
     }
 }
