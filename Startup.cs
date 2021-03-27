@@ -97,7 +97,6 @@ namespace ViralLinks
                             Log.Warning("***** CLAIM Not Found *******");
                             return false;
                         }
-                        Console.WriteLine(role_claim.Value);
                         if(role_claim.Value == Roles.Member || role_claim.Value == Roles.VIP || role_claim.Value == Roles.Admin)
                         {
                             return true;

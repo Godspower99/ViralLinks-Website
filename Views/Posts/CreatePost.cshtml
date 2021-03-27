@@ -1,8 +1,16 @@
 @model CreatePostModel
 @{
     ViewBag.Title = "Create Post";
+    var categories = ViewBag.Categories as List<PostCategory>;
     var request = Context.Request;
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+
+     // Post Categories
+    var postCategories = categories.Select<PostCategory,SelectListItem>(c => 
+        new SelectListItem{
+            Value = c.Id,
+            Text = c.Header,
+        }).ToList();
 }
 
 <div class="row">
@@ -13,7 +21,8 @@
             <div class="row pt-2">
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-center">
-                    <p style="font-weight: 400;font-size: 18px; color: #989898" >You are about to post on the <br> WhatsApp groups' page</p>
+                    <p style="font-weight: 400;font-size: 18px; color: #989898; margin-bottom:0rem;" >You are about to post on the</p>
+                    <p id="category_page" style="font-weight: 400;font-size: 18px; color: #989898">@postCategories[0].Text page</p>
                 </div>
                 <div class="col-md-3"></div>
             </div>
@@ -22,7 +31,7 @@
             <form method="POST" enctype="multipart/form-data" asp-action="CreatePost" asp-controller="Posts">
 
                 <!--Subject-->
-                <div class="row pt-4">
+                <div class="row pt-2">
                     <div class="col-md-3"></div>
                     <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
@@ -53,7 +62,7 @@
                 </div>
 
                 <!--Description-->
-                <div class="row pt-3">
+                <div class="row pt-1">
                     <div class="col-md-3"></div>
                     <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
@@ -84,7 +93,7 @@
                 </div>
 
                 <!--Link-->
-                <div class="row pt-3">
+                <div class="row pt-1">
                     <div class="col-md-3"></div>
                     <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
@@ -92,7 +101,25 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-12">
-                                    <input asp-for="Link" type="text" placeholder=" Insert link" style="font-size:18px; font-weight:400; border: none;"/>
+                                    <input asp-for="Link" type="url" placeholder=" Insert link" style="font-size:18px; font-weight:400; border: none;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+
+                <!-- Category -->
+                <div class="row pt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 text-center" style="color: #989898;padding-bottom: 1rem;font-size: 18px;">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 text-left">
+                                    <label style="font-size: 1rem; color:#989898; border-radius:5px;">Select Category</label>
+                                </div>
+                                <div class="col-12">
+                                    <select class="form-control" asp-for="CategoryId" asp-items="@postCategories"></select>
                                 </div>
                             </div>
                         </div>
@@ -101,13 +128,13 @@
                 </div>
 
                 <!--Upload Image-->
-                <div class="row pt-5">
+                <div class="row pt-1">
                     <div class="col-md-3"></div>
                     <div class="col-md-6 text-left" style="color: #0395FF;margin-left: 1.5rem;
-                        padding-bottom: 3rem;font-size: 18px;">
+                        padding-bottom: 2rem;font-size: 18px;">
                         <div class="container">
                             <div class="row">
-                                <input id="photo-input" type="file" asp-for="ProfilePicture" />
+                                <input id="photo-input" type="file" asp-for="Image" />
                                 @* <div id="upload-button" class="col-12">
                                     <p class="float-left" style="font-size:18px">Upload image</p> 
                                     <i class="material-icons pl-1" style="font-size: 24px;">vertical_align_top</i>
@@ -191,4 +218,13 @@
         photo_input.click();
     };
 
+</script>
+
+<!-- Post category select evenh-->
+<script defer>
+    var catid = document.getElementById('CategoryId');
+    var title = document.getElementById('category_page');
+    catid.oninput = function(){
+        title.textContent = catid.options[catid.options.selectedIndex].text + " page";
+    }
 </script>

@@ -1,8 +1,8 @@
-@model Post;
+@model PostObjectModel;
 
 @{
     Layout = "_GuestLayout";
-    ViewBag.Title = Model.Subject;
+    ViewBag.Title = Model.Post.Subject;
     var request = Context.Request;
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
     var userIsAuthorized = Context.User.Identity.IsAuthenticated;
@@ -22,8 +22,8 @@
                             <!--Image and name-->
                             <div class="col-12">
                               <img class="float-left post_item_image" src="@Model.UserImageURI">
-                              <p class="float-left pl-3 pt-2 post_item_name">@Model.Username <br> <span class="post_item_category">.@Model.CategoryHeader</span></p>
-                              <p class="float-right pr-3 pt-2 post_item_date">@Model.TimeStamp.GetTimeAgo()</p>
+                              <p class="float-left pl-3 pt-2 post_item_name">@Model.Post.Username <br> <span class="post_item_category">.@Model.Post.CategoryHeader</span></p>
+                              <p class="float-right pr-3 pt-2 post_item_date">@Model.Post.TimeStamp.GetTimeAgo()</p>
                             </div> 
                             <div class="col-12 text-center" style="height: max-content;">
                               <img class="post_item_description_image" src="@Model.ImageURI" style="height: 300px; width: 80%;">
@@ -34,7 +34,7 @@
                                 <div class="row">
                                   <!-- Views -->
                                   <div class="col-4 p-0 pl-5">
-                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye"></i> 187</p>
+                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye"></i> @Model.Visits</p>
                                   </div>
                                   <!-- Comments -->
                                   <div class="comments-icon col-4 text-center p-0">
@@ -50,10 +50,10 @@
 
                             <!--Link-->
                             <div class="col-12 pt-0 pl-5 pr-5">
-                              <p class="pt-2 post_item_description_text">@Model.Description</p>
+                              <p class="pt-2 post_item_description_text">@Model.Post.Description</p>
                               <hr style="background-color: #C4C4C4; color: #C4C4C4; height:1px; width:90%">
-                              <a href="@Model.PostLink" target="_blank">
-                               <p class="post_item_link"> @Model.PostLink</p>
+                              <a asp-action="GotoPostLink" asp-controller="Posts" asp-route-postid="@Model.Post.PostId" target="_blank">
+                               <p class="post_item_link"> @Model.Post.PostLink</p>
                               </a>
                             </div>
                           </div>

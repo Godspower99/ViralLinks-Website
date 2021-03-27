@@ -46,7 +46,7 @@ namespace ViralLinks.InternalServices
             return formats.Any(item => file.FileName.EndsWith(item,StringComparison.OrdinalIgnoreCase));
         }
 
-        public async Task<string> UploadBlob(Stream stream, string containerName, string fileName)
+        private async Task<string> UploadBlob(Stream stream, string containerName, string fileName)
         {
             Uri blobUri = new Uri("https://" +
                                   AzureStorageConfig.AccountName +
@@ -61,11 +61,17 @@ namespace ViralLinks.InternalServices
             return blobUri.AbsoluteUri;
         }
 
-        public async Task<string> GetProfilePictureAsync(string userId)
+        public string GetProfilePictureAsync(string userId)
         {
-            var metaData = await dbContext.FileMetaDatas.FirstOrDefaultAsync(f => f.Id == userId);
+            // var metaData = await dbContext.FileMetaDatas.FirstOrDefaultAsync(f => f.Id == userId);
             // GET FROM AZURE BLOB STORAGE
             return $"https://{AzureStorageConfig.AccountName}.blob.core.windows.net/{AzureStorageConfig.ProfilePicturesContainer}/{userId}";      
+        }
+
+        public string GetPostImageAsync(string postid)
+        {
+            // GET FROM AZURE BLOB STORAGE
+            return $"https://{AzureStorageConfig.AccountName}.blob.core.windows.net/{AzureStorageConfig.PostImagesContainer}/{postid}";
         }
 
         public async Task UpdateProfilePicture(ApplicationUser user, IFormFile pictureFile)
@@ -93,6 +99,40 @@ namespace ViralLinks.InternalServices
                 });
             }
             await dbContext.SaveChangesAsync();
+        }
+
+        public async Task UploadPostImage(CreatePostModel postModel, Post post)
+        {
+            if(postModel.Image != null)
+            {
+                var fileExtension = Path.GetExtension(postModel.Image.FileName);
+                var fileName = Path.GetFileName(postModel.Image.Name);
+                using var stream = new MemoryStream();
+                await postModel.Image.CopyToAsync(stream);
+                var uri = await this.UploadBlob(stream,AzureStorageConfig.PostImagesContainer,post.PostId);
+               await dbContext.AddAsync(new FileMetaData{
+                   Id = post.PostId,
+                   Extension = fileExtension,
+                   LastUpdate = DateTime.Now,
+                   URI = uri,
+                   Name = fileName
+               });
+                await dbContext.SaveChangesAsync();
+            }
+            // upload default image
+            else{
+                using var fileStream = new FileStream("./wwwroot/virallinks-text.png",FileMode.Open);
+                var fileName = Path.GetFileName(fileStream.Name);
+                var fileExtension = Path.GetExtension(fileStream.Name);
+                var uri = await this.UploadBlob(fileStream,AzureStorageConfig.PostImagesContainer,post.PostId);
+                await dbContext.AddAsync(new FileMetaData{
+                    Id = post.PostId,
+                    Extension = fileExtension,
+                    LastUpdate = DateTime.Now,
+                    URI = uri,
+                    Name = fileName
+                });
+            }
         }
 
         public async Task UpdateProfilePicture(ApplicationUser user, FileStream fileStream, string name, string extension)

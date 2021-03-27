@@ -28,8 +28,6 @@ namespace ViralLinks
                 Description = createPost.Description,
                 PostLink = createPost.PostLink,
                 TimeStamp = createPost.TimeStamp,
-                ImageURI = createPost.ImageURI,
-                UserImageURI = createPost.UserImageURI,
                 CategoryHeader = createPost.CategotyHeader
             });
             return Ok();
@@ -43,7 +41,6 @@ namespace ViralLinks
                 await context.DeletePost(post);
             return Ok();
         }
-
     }
 
     public class CreatePostTest

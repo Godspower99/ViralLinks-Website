@@ -32,6 +32,36 @@ namespace ViralLinks
             return $"{minutes}m ago";
         }
 
+        public static string GetTodaysDate(this DateTime time)
+        {
+            var day = time.Date.Day;
+            var day_string = day == 1 ? "1st" : day == 2 ? "2nd" : day == 3 ? "3rd" : $"{day}th";
+            var month = time.Date.Month;
+            var year = time.Date.Year;
+            var month_string = month.GetMonth();
+            return $"{day_string} {month_string} {year}";
+        }
+
+        public static string GetMonth(this int month)
+        {
+            switch(month)
+            {
+                case 1:return "Jan";
+                case 2:return "Feb";
+                case 3:return "Mar";
+                case 4:return "Apr";
+                case 5:return "May";
+                case 6:return "Jun";
+                case 7:return "July";
+                case 8:return "Aug";
+                case 9:return "Sept";
+                case 10:return "Oct";
+                case 11:return "Nov";
+                case 12:return "Dec";
+                default: return string.Empty;
+            }
+        }
+
         public static string GetPostsCount(this int count)
         {
             if(count > 999)

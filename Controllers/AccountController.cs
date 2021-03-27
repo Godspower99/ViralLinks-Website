@@ -308,20 +308,6 @@ namespace ViralLinks.Controllers
             return View();
         }
 
-
-        [HttpGet, Route("full-post")]
-        public ActionResult FullPost()
-        {
-            return View();
-        }
-
-        [HttpGet, Route("pic")]
-        public async Task<ActionResult> Picture(string email)
-        {
-            var user = await userManager.FindByEmailAsync(email);
-            return Ok(await this.fileSystemService.GetProfilePictureAsync(user.Id));
-        }
-
         public async Task<ActionResult> Delete(string email)
         {
             var user = await userManager.FindByEmailAsync(email);

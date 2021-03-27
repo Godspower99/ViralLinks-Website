@@ -6,6 +6,7 @@ namespace ViralLinks.Data
         public string AccountName { get; set; }
         public string AccountKey { get; set; }
         public string ProfilePicturesContainer { get; set; }
+        public string PostImagesContainer { get;set; }
     }
 
     public class DatabaseConnectionOptions

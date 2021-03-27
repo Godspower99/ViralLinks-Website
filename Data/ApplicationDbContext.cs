@@ -10,6 +10,7 @@ namespace ViralLinks.Data
         public DbSet<SignUpForm> SignUpForms { get; set; }
         public DbSet<PostCategory> PostCategories { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<PostLinkVisits> PostLinkVisits { get; set; }
         
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options){}
 

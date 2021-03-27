@@ -49,13 +49,14 @@ namespace ViralLinks.Controllers
             var viewModel = new HomePageModel();
             viewModel.SelectedCategory = category;
             viewModel.PostCategories = await dbContext.GetPostCategories();
+            viewModel.TopTrendingPosts = await dbContext.TopTrendingPosts(fileSystemService,10);
 
             var route = HttpContext.Request.Path;
             var validFilter = new PaginationFilter(pageNumber: paginationFilter.PageNumber, pageSize: paginationFilter.PageSize);
 
-            var posts = await this.dbContext.GetPosts(category: category, amount: validFilter.PageSize);
+            var posts = await this.dbContext.GetPostObjectModels(fileSystemService, category: category, amount: validFilter.PageSize);
             var postsCount = await this.dbContext.GetPostsCount(category);
-            viewModel.Posts = PaginationHelpers<Post>.CreatePagedResponse(posts, validFilter,postsCount,urlGenerator,route);
+            viewModel.Posts = PaginationHelpers<PostObjectModel>.CreatePagedResponse(posts, validFilter,postsCount,urlGenerator,route);
             return View(model: viewModel);
         }
 
@@ -68,16 +69,17 @@ namespace ViralLinks.Controllers
                 // redirect user to free homepage
                 return RedirectToAction(actionName: "SignOut", controllerName: "Account");
             }
-            var userPic = await fileSystemService.GetProfilePictureAsync(user.Id);
+            var userPic = fileSystemService.GetProfilePictureAsync(user.Id);
             var viewModel = new HomePageModel(user,userPic);
             viewModel.SelectedCategory = category;
             viewModel.PostCategories = await dbContext.GetPostCategories();
+            viewModel.TopTrendingPosts = await dbContext.TopTrendingPosts(fileSystemService,10);
 
             var route = HttpContext.Request.Path;
             var validFilter = new PaginationFilter(pageNumber: paginationFilter.PageNumber, pageSize: paginationFilter.PageSize);
-            var posts = await this.dbContext.GetPosts(category: category, amount: validFilter.PageSize);
+            var posts = await this.dbContext.GetPostObjectModels(fileSystemService, category: category, amount: validFilter.PageSize);
             var postsCount = await this.dbContext.GetPostsCount(category);
-            viewModel.Posts = PaginationHelpers<Post>.CreatePagedResponse(posts, validFilter,postsCount,urlGenerator,route);
+            viewModel.Posts = PaginationHelpers<PostObjectModel>.CreatePagedResponse(posts, validFilter,postsCount,urlGenerator,route);
             return View(model: viewModel);
         }
 

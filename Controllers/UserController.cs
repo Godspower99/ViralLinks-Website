@@ -31,7 +31,7 @@ namespace ViralLinks
             {
                 return RedirectToAction(actionName:"SignIn", controllerName: "Account");
             }
-            var userPic = await fileSystemService.GetProfilePictureAsync(user.Id);
+            var userPic = fileSystemService.GetProfilePictureAsync(user.Id);
             var profile = new ProfileModel(user,userPic);
             return View(model: profile);
         }
