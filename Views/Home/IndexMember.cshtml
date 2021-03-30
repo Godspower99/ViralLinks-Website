@@ -292,7 +292,18 @@
                               </div>
                             </div>
                   </div>
-                    }                                     
+                    }       
+
+                   @if(Model.SelectedCategory != "all")
+                  {
+                    <!-- Create Post Button -->
+                    <div class="row pb-2 pt-2" style="margin-left: 1px;">
+                      <div class="col-12 text-center">
+                        <a asp-action="CreatePost" asp-controller="Posts" asp-route-selectedCategory=@Model.SelectedCategory class="btn btn-primary text-center mr-5" style="#0395FF !important;">Create Post</a>
+                      </div>
+                    </div>
+                  }                    
+
                   <!-- Posts Footer -->
                   <div class="row pb-2" style="margin-left: 1px;">
                     <div class="col-12 text-center">
@@ -300,8 +311,11 @@
                       @if(Model.Posts.TotalRecords == 0)
                       {
                         <p class="p-0" style="font-size: 14px; color: black; font-weight: 400;">No links here</p> 
-                        <a href="#" style="color: #0395FF; font-size: 14px; font-weight: 400;">Back to top</a>
                       }
+                     
+                        <a href="#" class="mr-2" style="color: #0395FF; font-size: 14px; font-weight: 400;">Back to top</a> 
+                     
+
                       <!-- Next and previous Page Available -->
                       @if(Model.Posts.PreviousPage != null && Model.Posts.NextPage != null)
                       {

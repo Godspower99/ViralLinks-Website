@@ -59,18 +59,26 @@ namespace ViralLinks
         }
 
         [HttpGet, Route("create-post"), Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
-        public async Task<ActionResult> CreatePost()
+        public async Task<ActionResult> CreatePost(string selectedCategory)
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
             if(user == null)
             {
                 return RedirectToAction(actionName:"SignOut", controllerName:"Account");
             }
+
+            // try find category
+            var category = await context.FindPostCategory(selectedCategory);
+            if(category == null || category.Id == "all")
+            {
+                return RedirectToAction(actionName:"IndexGuest",controllerName:"Home");
+            }
             var userpic = fileSystemService.GetProfilePictureAsync(user.Id);
             var createPost = new CreatePostModel(user,userpic);
-            var categories= await context.GetPostCategories();
-            categories.Remove(categories.FirstOrDefault(p => p.Id == "all"));
-            ViewBag.Categories = categories;
+            createPost.CategoryId = selectedCategory;
+            // var categories= await context.GetPostCategories();
+            // categories.Remove(categories.FirstOrDefault(p => p.Id == "all"));
+            ViewBag.Category = category;
             return View(model: createPost);
         }
 
