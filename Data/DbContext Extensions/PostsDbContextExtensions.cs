@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,8 +25,28 @@ namespace ViralLinks.Data
                 var postImageUri = fileSystem.GetPostImageAsync(post.PostId);
                 return new PostObjectModel(post,postImageUri,userImageUri)
                 {
+                    CommentsCount = await dbContext.PostCommentCount(post.PostId),
                     Visits = await dbContext.PostVisitCount(post.PostId),
                 };
+            }
+            return null;
+        }
+
+        public static async Task<FullPostObjectModel> FindFullPostObjectModel(this ApplicationDbContext dbContext, string id, FileSystemService fileSystem,UserManager<ApplicationUser> userManager)
+        {
+            var post = await dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == id);
+            if(post != null)
+            {
+                var userImageUri = fileSystem.GetProfilePictureAsync(post.UserId);
+                var postImageUri = fileSystem.GetPostImageAsync(post.PostId);
+                var comments = await dbContext.GetPostCommentObjectModels(userManager,fileSystem,id);
+
+                return new FullPostObjectModel(post,postImageUri,userImageUri)
+                {
+                    Visits = await dbContext.PostVisitCount(post.PostId),
+                    Comments = comments,
+                    CommentsCount = comments.Count,
+                };                
             }
             return null;
         }
@@ -40,7 +61,7 @@ namespace ViralLinks.Data
             return await dbContext.Posts.Where(p => p.CategoryId == category).OrderByDescending(p => p.TimeStamp).Take(amount).ToListAsync();
         }
 
-        public static async Task<List<PostObjectModel>> GetPostObjectModels(this ApplicationDbContext dbContext, FileSystemService fileSystem, string category = "all", int amount = 10)
+        public static async Task<List<PostObjectModel>> GetPostObjectModels(this ApplicationDbContext dbContext, FileSystemService fileSystem, string userid="guest", string category = "all", int amount = 10)
         {
             var posts = await dbContext.GetPosts(category,amount);
             return posts.Select<Post,PostObjectModel>( p =>  {
@@ -48,7 +69,9 @@ namespace ViralLinks.Data
                 var postImageUri = fileSystem.GetPostImageAsync(p.PostId);
                 return new PostObjectModel(p,postImageUri,userImageUri)
                 {
-                    Visits = dbContext.PostVisitCount(p.PostId).GetAwaiter().GetResult()
+                    Visits = dbContext.PostVisitCount(p.PostId).GetAwaiter().GetResult(),
+                    CommentsCount = dbContext.PostCommentCount(p.PostId).GetAwaiter().GetResult(),
+                    PostCertificates = dbContext.GetPostCertificate(p.PostId,userid).GetAwaiter().GetResult(),
                 };
             }).ToList();
         }
@@ -120,6 +143,71 @@ namespace ViralLinks.Data
                 postModels.Add(postObj);
             }
             return postModels;
+        }
+
+        public static async Task<List<PostComment>> GetPostComments(this ApplicationDbContext dbContext, string postId)
+        {
+            return await dbContext.PostComments.Where(pc => pc.PostId == postId).OrderByDescending(pc => pc.TimeStamp).ToListAsync();
+        }
+
+        public static async Task AddPostComment(this ApplicationDbContext dbContext, PostComment postComment)
+        {
+            await dbContext.PostComments.AddAsync(postComment);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public static async Task<int> PostCommentCount(this ApplicationDbContext dbContext, string postId)
+        {
+            return await dbContext.PostComments.Where(pc => pc.PostId == postId).CountAsync();
+        }
+
+        public static async Task<List<PostCommentObjectModel>> GetPostCommentObjectModels(this ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, FileSystemService fileSystem, string postid)
+        {
+            var postComments = await dbContext.GetPostComments(postid);
+            var comments = new List<PostCommentObjectModel>();
+            foreach(var pc in postComments)
+            {
+                comments.Add(new PostCommentObjectModel{
+                    Text = pc.Text,
+                    TimeStamp = pc.TimeStamp,
+                    UserImage = fileSystem.GetProfilePictureAsync(pc.UserId),
+                    Username = (await userManager.FindByIdAsync(pc.UserId)).UserName,
+                });
+            }
+            return comments;
+        }
+
+        public static async Task<int> GetPostCertificateCount(this ApplicationDbContext dbContext, string postid)
+        {
+            return (await dbContext.PostCertificates.Where(pc => pc.PostId == postid).ToListAsync()).GroupBy(p => p.UserId).Count();
+        }
+
+        public static async Task<Tuple<bool,int>> UpdatePostCertificate(this ApplicationDbContext dbContext, string postid, string userid)
+        {
+            // add new certificate if none is found
+            var cert = await dbContext.PostCertificates.Where(pc => pc.PostId == postid && pc.UserId == userid).ToListAsync();
+            if(cert.Count == 0)
+            {
+                await dbContext.PostCertificates.AddAsync(new PostCertificate{
+                    PostId = postid,
+                    UserId = userid,
+                    TimeStamp = DateTime.Now,
+                });
+                await dbContext.SaveChangesAsync();
+                var count = await dbContext.GetPostCertificateCount(postid);    
+                return Tuple.Create<bool,int>(item1: true, item2: count);
+            }
+            dbContext.PostCertificates.RemoveRange(cert);            
+            await dbContext.SaveChangesAsync();
+            var x = await dbContext.GetPostCertificateCount(postid);
+            return Tuple.Create<bool,int>(item1: false, item2: x);
+        }
+
+        public static async Task<Tuple<bool,int>> GetPostCertificate(this ApplicationDbContext dbContext, string postid, string userid)
+        {
+            var count = await dbContext.GetPostCertificateCount(postid);
+            var certified = userid == "guest" ? false : await dbContext.PostCertificates.AnyAsync(pc => pc.PostId == postid && pc.UserId == userid);
+            return Tuple.Create<bool,int>(item1: certified, item2: count);
         }
     }
 }

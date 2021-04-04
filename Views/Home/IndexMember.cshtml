@@ -239,6 +239,7 @@
                   <!-- Post Objects --> 
                     @foreach (var post in Model.Posts.Body)
                     {
+                      var cert_color = post.PostCertificates.Item1 ? "#262F56" : "gray";
                   <div class="row pb-2 post_item" style="margin-left: 1px;">
                             <!--Image and name-->
                             <div class="col-12">
@@ -267,15 +268,15 @@
                                 <div class="row">
                                   <!-- Views -->
                                   <div class="col-4 p-0 pl-5">
-                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye"></i> @post.Visits</p>
+                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye pr-2"></i>@post.Visits</p>
                                   </div>
                                   <!-- Comments -->
                                   <div class="comments-icon @postItemIconClass p-0">
-                                    <p style="font-size: 16px;"><i class="fa fa-comments"></i> 5</p>
+                                    <p style="font-size: 16px;"><i class="fa fa-comments pr-2"></i>@post.CommentsCount</p>
                                   </div>
                                   <!-- liked -->
                                   <div class="likes-icon @postItemIconClass p-0">
-                                    <p style="font-size: 16px;"><i class="fa fa-certificate"></i> 24</p>
+                                    <p style="font-size: 16px;"><i id="@post.Post.PostId" style="color: @cert_color;" class="fa fa-certificate pr-2 cert_click" onclick="certifyPost('@baseUri','@post.Post.PostId')"></i>@post.PostCertificates.Item2</p>
                                   </div>
                                  @if(userIsAuthorized)
                                  {
@@ -338,6 +339,30 @@
               </div>
               <div class="col-md-3"></div>
             </div> 
+
+
+<script>
+  var certifyPost = function(baseUrl,postid)
+  {
+    var e = document.getElementById(postid);
+    var e_parent = e.parentElement;
+    fetch(baseUrl +'/posts/certify-post?postid=' + postid, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }})
+    .then(response => response.json())
+    .then(data => {
+      if(data.certified)
+        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: #262F56;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+      else 
+        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: gray;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+        })
+    .catch(error => console.error('Unable to get items.', error));
+  }
+  
+</script>
 
 
   <style>

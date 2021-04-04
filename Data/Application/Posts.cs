@@ -58,4 +58,29 @@ namespace ViralLinks.Data
             this.UserId = userid;
         }
     }
+
+    public class PostComment
+    {
+        [Key]
+        public long Id { get; set; }
+        public string PostId { get; set; }
+        public string Text { get; set; }
+        public DateTime TimeStamp { get; set; }
+        public string UserId { get; set; }
+
+        public PostComment()
+        {
+            TimeStamp = DateTime.Now;
+        }
+        
+    }
+
+    public class PostCertificate
+    {
+        [Key]
+        public long Id { get; set; }
+        public string UserId { get; set; }
+        public string PostId { get; set; }
+        public DateTime TimeStamp { get; set; }
+    }
 }

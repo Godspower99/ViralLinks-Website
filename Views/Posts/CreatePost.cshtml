@@ -36,10 +36,10 @@
                     <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
                         padding-bottom: 1rem;font-size: 18px;">
-                        <div class="container">
+                        <div class="container p-0">
                             <div class="row">
                                 <div class="col-12">
-                                    <input oninput="OnSubjectInput()" asp-for="Subject" type="text" maxlength="80" autofocus placeholder=" Subject" style="font-size:18px; font-weight:400; border: none;"/>
+                                    <input required minlength="10" oninput="OnSubjectInput()" asp-for="Subject" type="text" maxlength="80" autofocus placeholder=" Subject" style="font-size:18px; font-weight:400; border: none;"/>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                 <div class="row pt-0" style="margin-top: -5px;">
                     <div class="col-md-3"></div>
                     <div class="col-md-6 text-right" style="color: #989898;font-size: 14px;">
-                        <div class="container">
+                        <div class="container ">
                             <div class="row">
                                 <div class="col-12 text-right">
                                     <p id="subjectCount" style="font-size:14px; font-weight:400; border: none;">0/20</p>
@@ -61,16 +61,31 @@
                     <div class="col-md-3"></div>
                 </div>
 
-                <!--Description-->
+                 <!--Link-->
                 <div class="row pt-1">
                     <div class="col-md-3"></div>
                     <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
                         padding-bottom: 1rem;font-size: 18px;">
+                        <div class="container p-0">
+                            <div class="row">
+                                <div class="col-12">
+                                    <input asp-for="Link" required type="url" placeholder=" Insert link" style="font-size:18px; font-weight:400; border: none;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+
+                <!--Description-->
+                <div class="row pt-1">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-7">
                         <div class="container">
                             <div class="row">
                                 <div class="col-12">
-                                    <textarea asp-for="Description" maxlength="400" type="text" placeholder=" Description" style="font-size:18px; font-weight:400; border: none;"></textarea>
+                                    <textarea class="form-control" asp-for="Description" required minlength="20" maxlength="400" type="text" placeholder=" Description" style="font-size:18px; font-weight:400;"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -85,23 +100,6 @@
                             <div class="row">
                                 <div class="col-12 text-right">
                                     <p style="font-size:14px; font-weight:400; border: none;">@Model.DescriptionCount/200</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3"></div>
-                </div>
-
-                <!--Link-->
-                <div class="row pt-1">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6 text-center form-control" style="color: #989898;margin-left: 2rem;margin-right: 2rem;
-                        border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
-                        padding-bottom: 1rem;font-size: 18px;">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-12">
-                                    <input asp-for="Link" type="url" placeholder=" Insert link" style="font-size:18px; font-weight:400; border: none;"/>
                                 </div>
                             </div>
                         </div>

@@ -1,4 +1,4 @@
-@model PostObjectModel;
+@model FullPostObjectModel;
 
 @{
     ViewBag.Title = "Post";
@@ -6,6 +6,9 @@
     var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
     var userIsAuthorized = Context.User.Identity.IsAuthenticated;
     var postItemIconClass = userIsAuthorized? "col-2" : "col-4 text-center";
+   Model.CreatePostComment.PostId = Model.Post.PostId;
+
+   var cert_color = Model.PostCertificates.Item1 ? "#262F56" : "gray";
 }
 
             <!-- Feeds for you -->
@@ -25,12 +28,8 @@
                               <p class="float-left pl-3 pt-2 post_item_name">@Model.Post.Username <br> <span class="post_item_category">.@Model.Post.CategoryHeader</span></p>
                               <p class="float-right pr-3 pt-2 post_item_date">@Model.Post.TimeStamp.GetTimeAgo()</p>
                             </div> 
-                            @* <!--Subject-->
-                            <div class="col-12">
-                              <p class="pl-3 pt-0 post_item_subject">@Model.Subject</p>
-                            </div>       *@
-                            <!--Description--> 
                             <div class="col-12 text-center" style="height: max-content;">
+                              <p class="post_item_subject pt-2 pb-2">@Model.Post.Subject</p>
                               <img class="post_item_description_image" src="@Model.ImageURI" style="height: 300px; width: 80%;">
                             </div>
                              <!-- icons -->              
@@ -39,15 +38,15 @@
                                 <div class="row">
                                   <!-- Views -->
                                   <div class="col-4 p-0 pl-5">
-                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye"></i> @Model.Visits</p>
+                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye pr-2"></i>@Model.Visits</p>
                                   </div>
                                   <!-- Comments -->
                                   <div class="comments-icon @postItemIconClass p-0">
-                                    <p style="font-size: 16px;"><i class="fa fa-comments"></i> 5</p>
+                                    <p style="font-size: 16px;"><i class="fa fa-comments pr-2"></i>@Model.CommentsCount</p>
                                   </div>
                                   <!-- liked -->
                                   <div class="likes-icon @postItemIconClass p-0">
-                                    <p style="font-size: 16px;"><i class="fa fa-certificate"></i> 24</p>
+                                    <p style="font-size: 16px;"><i id="@Model.Post.PostId" style="color: @cert_color;" class="fa fa-certificate pr-2 cert_click" onclick="certifyPost('@baseUri','@Model.Post.PostId')"></i>@Model.PostCertificates.Item2</p>
                                   </div>
                                  @if(userIsAuthorized)
                                  {
@@ -72,6 +71,52 @@
                                <p class="post_item_link"> @Model.Post.PostLink</p>
                               </a>
                             </div>
+
+                            <!-- Comment Section-->
+                            <section class="col-12 pt-2 pb-5" style="border-radius: 7.5px; background-color:white;">
+                              <p class="post_item_subject pt-2 pb-0 pl-2" style="font-weight: 500 !important; font-size: 18px !important;">Comments</p>
+                              <hr class="mt-0 mb-0 pt-0 pb-4" style="background-color: transparent;">
+
+                              <!-- Comments -->
+                              <div style="height: max-content; max-height: 20rem; overflow-y:auto;">
+                                @if(Model.Comments.Count == 0)
+                                {
+                                  <p style="text-align: center;font-weight: 500;font-size: 16px;">No Comments</p>
+                                }
+                                @if(Model.Comments.Count > 0)
+                                {
+                                  <div class="container">
+                                    
+                                    @foreach (var comment in Model.Comments)
+                                    {
+                                      <div class="row" style="background-color: #F5F5F5;border-radius: 5px;padding: 1.5rem;width: 100%;height: max-content; margin-bottom: 1rem;">
+                                        <div class="col-12">
+                                          <img class="float-left post_item_image mr-3" src="@comment.UserImage" style="width: 30px; height: 30px;">
+                                          <h4 class="float-left pt-2 pb-2" style="font-size: 16px;font-weight: 400;text-align: left;">@comment.Username</h4>
+                                          <p class="float-right pr-3 pt-2 post_item_date">@comment.TimeStamp.GetTimeAgo()</p>
+                                        </div>
+                                        <div class="col-12">
+                                          <p style="font-size: 14px;color: #262F56;">@comment.Text</p>
+                                        </div>
+                                      </div>
+                                    }
+                                  </div>
+                                }
+                              </div>
+                            </section>
+
+                           <!-- Post Comment -->
+                            <section class="col-12 pt-5 pb-0">
+                              <img class="float-left post_item_image mr-4" style="width: 5rem; height:5rem;" src="@Model.ProfilePicture">
+                              <div class="float-left" style="width: 70%;">
+                                <form asp-action="WritePostComment" asp-controller="Posts" method="POST">
+                                  <input hidden asp-for="@Model.CreatePostComment.PostId">
+                                  <textarea asp-for="@Model.CreatePostComment.Text" required maxlength="500" minlength="10" class="form-control" placeholder="Leave a message..." style="padding: 0.5rem;width: 100% !important;">
+                                  </textarea>
+                                  <button class="btn" style="background-color: #0395FF;" type="submit">Submit</button>
+                                </form>
+                              </div>
+                            </section>
                           </div>
                         </div>
                       </div>
@@ -81,6 +126,29 @@
               </div>
               <div class="col-md-3"></div>
             </div>
+
+<script>
+  var certifyPost = function(baseUrl,postid)
+  {
+    var e = document.getElementById(postid);
+    var e_parent = e.parentElement;
+    fetch(baseUrl +'/posts/certify-post?postid=' + postid, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }})
+    .then(response => response.json())
+    .then(data => {
+      if(data.certified)
+        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: #262F56;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+      else 
+        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: gray;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+        })
+    .catch(error => console.error('Unable to get items.', error));
+  }
+  
+</script>
 
 <style>
  .post_item {
@@ -157,5 +225,8 @@
 
 .save-icon{
   color:#0395FF;
+}
+.cert_click:hover{
+  cursor: pointer;
 }
  </style>

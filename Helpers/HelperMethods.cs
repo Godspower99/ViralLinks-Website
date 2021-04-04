@@ -20,7 +20,11 @@ namespace ViralLinks
                 return $"{(int)Math.Floor(days / 30.0)} months ago";
             // check for weeks
             if(days >= 7)
-                return $"{(int)Math.Floor(days/ 7.0)} weeks ago";
+            {
+                var week = (int)Math.Floor(days/ 7.0);
+                var week_string = week == 1 ? "week" : "weeks";
+                return $"{week} {week_string} ago";
+            }
             if(days > 0)
                 return $"{days}d ago";
             // check for hours

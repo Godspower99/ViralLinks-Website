@@ -11,7 +11,9 @@ namespace ViralLinks.Data
         public DbSet<PostCategory> PostCategories { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostLinkVisits> PostLinkVisits { get; set; }
-        
+        public DbSet<PostComment> PostComments { get; set; }
+        public DbSet<PostCertificate> PostCertificates { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options){}
 
         protected override void OnModelCreating(ModelBuilder builder)

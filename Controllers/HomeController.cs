@@ -77,7 +77,7 @@ namespace ViralLinks.Controllers
 
             var route = HttpContext.Request.Path;
             var validFilter = new PaginationFilter(pageNumber: paginationFilter.PageNumber, pageSize: paginationFilter.PageSize);
-            var posts = await this.dbContext.GetPostObjectModels(fileSystemService, category: category, amount: validFilter.PageSize);
+            var posts = await this.dbContext.GetPostObjectModels(fileSystemService, category: category, userid: user.Id, amount: validFilter.PageSize);
             var postsCount = await this.dbContext.GetPostsCount(category);
             viewModel.Posts = PaginationHelpers<PostObjectModel>.CreatePagedResponse(posts, validFilter,postsCount,urlGenerator,route);
             return View(model: viewModel);

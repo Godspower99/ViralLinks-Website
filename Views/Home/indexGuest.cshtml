@@ -251,7 +251,7 @@
                             </div>      
                             <!--Description--> 
                             <div class="col-12 text-center" style="height: max-content;">
-                              <a class="float-left" href="@baseUri/posts/@post.Post.PostId"><img class="post_item_description_image" src="@post.ImageURI" style="height: 90px; width: 100px;"></a>
+                              <a class="float-left" href="@baseUri/posts/guest?postid=@post.Post.PostId"><img class="post_item_description_image" src="@post.ImageURI" style="height: 90px; width: 100px;"></a>
                               <a href="@baseUri/posts/guest?postid=@post.Post.PostId"><p class="post_item_description_text pt-3">@post.Post.Description</p></a>
                             </div>
                             <!--Link-->
@@ -266,15 +266,15 @@
                                 <div class="row">
                                   <!-- Views -->
                                   <div class="col-4 p-0 pl-5">
-                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye"></i> @post.Visits</p>
+                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye pr-2"></i>@post.Visits</p>
                                   </div>
                                   <!-- Comments -->
                                   <div class="comments-icon col-4 text-center p-0">
-                                    <p style="font-size: 16px;"><i class="fa fa-comments"></i> 5</p>
+                                    <p style="font-size: 16px;"><i class="fa fa-comments pr-2"></i>@post.CommentsCount</p>
                                   </div>
                                   <!-- liked -->
                                   <div class="likes-icon col-4 text-center p-0">
-                                    <p style="font-size: 16px;"><i class="fa fa-certificate"></i> 24</p>
+                                    <p style="font-size: 16px;"><i style="color: gray;" class="fa fa-certificate pr-2"></i>@post.PostCertificates.Item2</p>
                                   </div>
                                 </div>
                               </div>

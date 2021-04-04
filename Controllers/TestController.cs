@@ -41,6 +41,13 @@ namespace ViralLinks
                 await context.DeletePost(post);
             return Ok();
         }
+
+        [HttpPost,Route("test-javascript")]
+        public async Task<IActionResult> Test(string text)
+        {
+            Console.WriteLine("Text :: {0}", text);
+            return new JsonResult("50");
+        }
     }
 
     public class CreatePostTest
