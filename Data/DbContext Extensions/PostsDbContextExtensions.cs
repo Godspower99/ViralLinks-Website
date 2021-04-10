@@ -75,6 +75,21 @@ namespace ViralLinks.Data
                 };
             }).ToList();
         }
+        public static async Task<List<PostObjectModel>> GetPostsByUserObjecModels(this ApplicationDbContext dbContext, FileSystemService fileSystem, string userid, int amount = 10)
+        {
+            var posts = await dbContext.GetPostsByUser(userid,amount);
+            return posts.Select<Post,PostObjectModel>(p => {
+                var userImageUri = fileSystem.GetProfilePictureAsync(p.UserId);
+                var postImageUri = fileSystem.GetPostImageAsync(p.PostId);
+                return new PostObjectModel(p,postImageUri,userImageUri)
+                {
+                    Visits = dbContext.PostVisitCount(p.PostId).GetAwaiter().GetResult(),
+                    CommentsCount = dbContext.PostCommentCount(p.PostId).GetAwaiter().GetResult(),
+                    PostCertificates = dbContext.GetPostCertificate(p.PostId,userid).GetAwaiter().GetResult(),
+                };
+            }).ToList();
+        }
+
 
         public static async Task<int> GetPostsCount(this ApplicationDbContext dbContext, string category ="all")
         {
@@ -86,22 +101,18 @@ namespace ViralLinks.Data
             return await dbContext.Posts.Where(p => p.CategoryId == category).CountAsync();
         }
 
+        public static async Task<int> GetUserPostsCount(this ApplicationDbContext dbContext, string userid)
+        {
+            return await dbContext.Posts.Where(p => p.UserId == userid).CountAsync();
+        }
+
         public static async Task<List<Post>> GetPostsByUser(this ApplicationDbContext dbContext, string userId, int amount = 10)
         {
             var userPosts =  dbContext.Posts.Where(p => p.UserId == userId).OrderByDescending(p => p.TimeStamp);
             return await userPosts.Take(amount).ToListAsync();
         }
 
-        public static async Task<List<PostObjectModel>> GetPostsByUserObjecModels(this ApplicationDbContext dbContext, FileSystemService fileSystem, string userid, int amount = 10)
-        {
-            var posts = await dbContext.GetPostsByUser(userid,amount);
-            return posts.Select<Post,PostObjectModel>(p => {
-                var userImageUri = fileSystem.GetProfilePictureAsync(p.UserId);
-                var postImageUri = fileSystem.GetPostImageAsync(p.PostId);
-                return new PostObjectModel(p,postImageUri,userImageUri);
-            }).ToList();
-        }
-
+      
         public static async Task SavePost(this ApplicationDbContext dbContext, Post post)
         {
             await dbContext.Posts.AddAsync(post);

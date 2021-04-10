@@ -48,7 +48,9 @@
                             var post = Model.TopTrendingPosts[i];
                             var active = i == 0 ? "active" : "";
                             <!-- Item 1-->
-                            <div class="carousel-item @active" style="background-color:#F5F5F5;">
+                            
+                              <div class="carousel-item @active" style="background-color:#F5F5F5;">
+                              <a asp-action="FullPostGuest" asp-controller="Posts" asp-route-postid="@post.Post.PostId">
                               <div style="background-color: #A39468; height: 127px; margin-left: 2rem; margin-right:1rem; border-radius: 5px;">
                                 <div class="container-fluid">
                                   <!-- Link Type-->
@@ -63,23 +65,26 @@
                                         <img src="@post.ImageURI" width="76" height="76" style="border-radius: 1000px; padding: 0rem; margin: 0rem;">
                                       </div>
                                       <div class="text-center">
-                                        <p style="font-size:12px; font-weight: 400; color: black; text-align: center;">@post.Post.Username</p>
+                                        <p style="font-size:12px; font-weight: 500; color: black; text-align: center;">@post.Post.Username</p>
                                       </div>
                                     </div>
                                     <div class="col-8 col-md-10 pt-3">  
-                                      <p class="text-left" style="font-size: 14px; font-weight: 400; color:#F0F0F0;">@post.Post.Subject</p>
+                                      <p class="text-left" style="font-size: 14px; font-weight: 500; color:#F0F0F0;">@post.Post.Subject</p>
                                     </div>
                                   </div>
                                   <div class="row">
                                     <div class="col-9 col-md-10"></div>
                                     <div class="col-3 col-md-2"  style="margin-top: -35px;">
                                       <i class="material-icons float-left p-0" style="color:#262F56; ">remove_red_eye</i>
-                                      <p class="p-0 text-center float-right; font-size: 14px; color: black;">@post.Visits</p>
+                                      <p class="p-0 text-center" style="font-size: 14px; font-weight:500; color: black;">@post.Visits</p>
                                     </div>
                                   </div>
                                 </div>
+                              
                               </div>
-                            </div>   
+                              </a>
+                            </div>
+
                           }
                         </div>
                         <!--/Slides-->
@@ -118,62 +123,70 @@
                     <div class="col-12 pl-1 pr-4">
                       <!-- Feeds for you -->
                       <div class="float-left text-center" style="background-color: #0395FF; height: 173px; width: 25%;">
-                        <div style="background-image: url(@baseUri/avatar.png); background-repeat: no-repeat;
-                          background-size: 50% 50%; background-position: center center; height: 65%; width: 100%;">
+                        <div class="container-fluid p-0">
+                          <div class="row">
+                            <a asp-action="IndexGuest" asp-controller="Home">
+                              <div style="max-height: max-content;" class="col-12 p-0 pt-4 text-center">
+                                <img src="@baseUri/for-you-icon.svg" style="width: 4rem;height: 4rem;" class="ml-5">
+                              </div>
+                              <div style="color: white;" class="col-12 p-0 pl-2 text-center pt-0">
+                                <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center pb-0 mb-1">Feeds for you</p>
+                                <p style="font-size: 0.7rem; padding-left: 2rem;font-weight: 400;" class="w-100 text-left pt-0">Posts customized by your activities</p>
+                              </div>
+                            </a>
+                          </div>
                         </div>
-                       <div class="container-fluid p-0">
-                         <div class="row">
-                           <div class="col-12 p-0 pl-2 text-center" style="margin-top: -15px; color: white;">
-                             <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center">Feeds for you</p>
-                             <p style="font-size: 0.7rem; padding-left: 2rem; margin-top: -5px; font-weight: 400;" class="w-100 text-left">Posts customized by your activities</p>
-                           </div>                         
-                         </div>
-                       </div>
                       </div>
 
                       <!-- VIP Lounge -->
                       <div class="float-left text-center" style="background-color: #0395FF; height: 173px; width: 25%;">
-                        <div style="background-image: url(@baseUri/avatar.png); background-repeat: no-repeat;
-                          background-size: 50% 50%; background-position: center center; height: 65%; width: 100%;">
+                        <div class="container-fluid p-0">
+                          <div class="row">
+                            <a href="#">
+                              <div style="max-height: max-content;" class="col-12 p-0 pt-4 text-center">
+                                <img src="@baseUri/vip-icon.svg" style="width: 4rem;height: 4rem;" class="ml-5">
+                              </div>
+                              <div style="color: white;" class="col-12 p-0 pl-2 text-center pt-0">
+                                <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center pb-0 mb-1">VIP Lounge</p>
+                                <p style="font-size: 0.7rem; padding-left: 2rem;font-weight: 400;" class="w-100 text-left pt-0">View trending threads by the admin</p>
+                              </div>
+                            </a>
+                          </div>
                         </div>
-                       <div class="container-fluid p-0">
-                         <div class="row">
-                           <div class="col-12 p-0 pl-2 text-center" style="margin-top: -15px; color: white;">
-                             <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center">VIP Lounge</p>
-                             <p style="font-size: 0.7rem; padding-left: 2rem; margin-top: -5px; font-weight: 400;" class="w-100 text-left">View trending trends by the admin</p>
-                           </div>                         
-                         </div>
-                       </div>
                       </div>
 
                       <!-- Telecom VTU -->
                       <div class="float-left text-center" style="background-color: #0395FF; height: 173px; width: 25%;">
-                        <div style="background-image: url(@baseUri/avatar.png); background-repeat: no-repeat;
-                          background-size: 50% 50%; background-position: center center; height: 65%; width: 100%;">
+                        <div class="container-fluid p-0">
+                          <div class="row">
+                            <a href="https://clubkash.com/noble" target="_blank">
+                              <div style="max-height: max-content;" class="col-12 p-0 pt-4 text-center">
+                                <img src="@baseUri/vtu-icon.svg" style="width: 4rem;height: 4rem;" class="ml-5">
+                              </div>
+                              <div style="color: white;" class="col-12 p-0 pl-2 text-center pt-0">
+                                <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center pb-0 mb-1">Telecom VTU</p>
+                                <p style="font-size: 0.7rem; padding-left: 2rem;font-weight: 400;" class="w-100 text-left pt-0">Cheapest data and airtimes at your fingertips</p>
+                              </div>
+                            </a>
+                          </div>
                         </div>
-                       <div class="container-fluid p-0">
-                         <div class="row">
-                           <div class="col-12 p-0 pl-2 text-center" style="margin-top: -15px; color: white;">
-                             <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center">Telecom VTU</p>
-                             <p style="font-size: 0.7rem; padding-left: 2rem; margin-top: -5px; font-weight: 400;" class="w-100 text-left">Cheapest data and airtimes at your fingertips</p>
-                           </div>                         
-                         </div>
-                       </div>
                       </div>
 
                       <!-- Admin Giveaway -->
                       <div class="float-left text-center" style="background-color: #0395FF; height: 173px; width: 25%;">
-                        <div style="background-image: url(@baseUri/avatar.png); background-repeat: no-repeat;
-                          background-size: 50% 50%; background-position: center center; height: 65%; width: 100%;">
+                        <div class="container-fluid p-0">
+                          <div class="row">
+                            <a href="#">
+                              <div style="max-height: max-content;" class="col-12 p-0 pt-4 text-center">
+                                <img src="@baseUri/dollar-sign.svg" style="width: 2rem;height: 4rem;" class="ml-5">
+                              </div>
+                              <div style="color: white;" class="col-12 p-0 pl-2 text-center pt-0">
+                                <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center pb-0 mb-1">Admin Giveaway</p>
+                                <p style="font-size: 0.7rem; padding-left: 2rem;font-weight: 400;" class="w-100 text-left pt-0">You could be our winner today</p>
+                              </div>
+                            </a>
+                          </div>
                         </div>
-                       <div class="container-fluid p-0">
-                         <div class="row">
-                           <div class="col-12 p-0 pl-2 text-center" style="margin-top: -15px; color: white;">
-                             <p style="font-size: 0.8rem; font-weight: 400;" class="w-100 text-center">Admin Giveaway</p>
-                             <p style="font-size: 0.7rem; padding-left: 2rem; margin-top: -5px; font-weight: 400;" class="w-100 text-left">You could be our winner today</p>
-                           </div>                         
-                         </div>
-                       </div>
                       </div>
                       
                     </div>
@@ -270,7 +283,7 @@
                                   </div>
                                   <!-- Comments -->
                                   <div class="comments-icon col-4 text-center p-0">
-                                    <p style="font-size: 16px;"><i class="fa fa-comments pr-2"></i>@post.CommentsCount</p>
+                                    <a asp-action="FullPostGuest" asp-controller="Posts" asp-route-postid="@post.Post.PostId"><p style="font-size: 16px;"><i class="fa fa-comments pr-2"></i>@post.CommentsCount</p></a>
                                   </div>
                                   <!-- liked -->
                                   <div class="likes-icon col-4 text-center p-0">
@@ -434,7 +447,7 @@ input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].v
 .post_item_subject {
   color: #262F56;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 600;
 }
 .post_item_subject:hover {
   color:#0395FF;
