@@ -1,0 +1,368 @@
+@using System.Security.Claims
+@model ProfileModel;
+
+  @{
+    ViewBag.Title = Model.User.UserName;
+    ViewBag.BackgroundColor = "#F5F5F5";
+    var request = Context.Request;
+    var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+    var role = Context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+    var userRole = role == Roles.Member ? "Regular member" : role == Roles.VIP ? "VIP member" :
+        role == Roles.Admin ? "Admin" : "Guest";
+    var upgradeText = role == Roles.Member ? "Upgrade to VIP" : "";
+    var userIsAuthorized = Context.User.Identity.IsAuthenticated;
+    var postItemIconClass = userIsAuthorized? "col-2" : "col-4 text-center";
+}
+    @* <section class="border border-light p-3 mb-4">
+      <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#centralModalSm">Small Modal</button>
+    </section>
+    
+    <!-- Central Modal Small -->
+    <div class="modal fade" id="centralModalSm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <!--Content-->
+        <div class="modal-content">
+          <!--Header-->
+          <div class="modal-header">
+            <h4 class="modal-title w-100" id="myModalLabel">Modal title</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <!--Body-->
+          <div class="modal-body">
+            
+          </div>
+          <!--Footer-->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+          </div>
+        </div>
+        <!--/.Content-->
+      </div>
+    </div>
+    <!-- Central Modal Small -->
+
+  </div> *@
+
+  
+   <!-- Posts -->
+            <div class="row pt-4">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <div class="container p-0">    
+                  <!-- Posts Header -->
+                  <div class="row pb-2" style="margin-left: 1px;">
+                    <div class="col-12">
+                      <p class="text-left float-left pl-4" style="color: black; font-size: 16px; margin-left: 10px; font-weight: 400;">Saved links (@Model.Posts.TotalRecords.GetPostsCount())</p>
+                    </div> 
+
+                  </div>
+                  <!-- Post Objects --> 
+                    @foreach (var post in Model.Posts.Body)
+                    {
+                      var cert_color = post.PostCertificates.Item1 ? "#0395FF" : "gray";
+                      var saved_icon = post.PostSaved ? "bookmark" : "bookmark_border";
+
+                      <div class="row pb-2 post_item" style="margin-left: 1px;">
+                            <!--Image and name-->
+                            <div class="col-12">
+                              <img class="float-left post_item_image" src="@post.UserImageURI" style="width:50px; height: 50px;">
+                              <p class="float-left pl-3 pt-2 post_item_name" style="text-transform: capitalize;">@post.Post.Username<br> <span class="post_item_category">.@post.Post.CategoryHeader</span></p>
+                              <p class="float-right pr-3 pt-2 post_item_date">@post.Post.TimeStamp.GetTimeAgo()</p>
+                            </div> 
+                            <!--Subject-->
+                            <div class="col-12">
+                              <a href="@baseUri/posts/member?postid=@post.Post.PostId" class ="pl-3 pt-0"><p class="post_item_subject">@post.Post.Subject</p></a>
+                            </div>      
+                            <!--Description--> 
+                            <div class="col-12 text-center" style="height: max-content;">
+                              <a class="float-left" href="@baseUri/posts/member?postid=@post.Post.PostId"><img class="post_item_description_image" src="@post.ImageURI" style="height: 90px; width: 100px;"></a>
+                              <a href="@baseUri/posts/member?postid=@post.Post.PostId"><p class="post_item_description_text pt-3">@post.Post.Description</p></a>
+                            </div>
+                            <!--Link-->
+                            <div class="col-12 text-left pt-0">
+                              <a href="@baseUri/posts/goto?postid=@post.Post.PostId" target="_blank">
+                                 <p class="post_item_link">@post.Post.PostLink</p>
+                              </a>
+                            </div>                      
+                            <!-- icons -->              
+                            <div class="col-12 pt-2 pb-4">
+                              <div class="container pl-4">
+                                <div class="row">
+                                  <!-- Views -->
+                                  <div class="col-4 p-0 pl-5">
+                                    <p style="color: rgb(12, 11, 11); opacity: 0.5; font-size: 16px;"><i class="fa fa-eye pr-2"></i>@post.Visits</p>
+                                  </div>
+                                  <!-- Comments -->
+                                  <div class="comments-icon @postItemIconClass p-0">
+                                    <p style="font-size: 16px; color: black;"><a href="@baseUri/posts/member?postid=@post.Post.PostId" style="color: black;"><i style="color: #262F56;" class="fa fa-comments pr-2"></i></a>@post.CommentsCount</p>
+                                  </div>
+                                  <!-- liked -->
+                                  <div class="likes-icon @postItemIconClass p-0">
+                                    <p style="font-size: 16px; color: black;"><i id="@post.Post.PostId" style="color: @cert_color; cursor:pointer;" class="fa fa-certificate pr-2 cert_click" onclick="certifyPost('@baseUri','@post.Post.PostId')"></i>@post.PostCertificates.Item2</p>
+                                  </div>
+                                  @if(userIsAuthorized)
+                                  {
+                                    <!-- save post -->
+                                    <div class="@postItemIconClass">
+                                      <p style="font-size: 16px;"><i style="color: #0395FF; cursor: pointer;" class="material-icons" onclick="savePost('@baseUri','@post.Post.PostId',this)">@saved_icon</i></p>
+                                    </div>
+                                    <!-- menu -->
+                                    <div class="@postItemIconClass">
+                                      <p style="font-size: 16px;"><i class="fa fa-ellipsis-v" style="color: #0395FF;"></i></p>
+                                    </div>
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                      </div>
+                    }                 
+                  <!-- Posts Footer -->
+                  <div class="row pb-2" style="margin-left: 1px;">
+                    <div class="col-12 text-center">
+                      <!-- no posts -->
+                      @if(Model.Posts.TotalRecords == 0)
+                      {
+                        <p class="p-0" style="font-size: 14px; color: black; font-weight: 400;">No links here</p> 
+                      }
+                     
+                        <a href="#" class="mr-2" style="color: #0395FF; font-size: 14px; font-weight: 400;">Back to top</a> 
+                      <!-- Next and previous Page Available -->
+                      @if(Model.Posts.PreviousPage != null && Model.Posts.NextPage != null)
+                      {
+                        <a href="@Model.Posts.PreviousPage" class="float-left" style="color: #0395FF; font-size: 14px; font-weight: 400;">Prev</a>
+                        <a href="@Model.Posts.NextPage" class="float-right" style="color: #0395FF; font-size: 14px; font-weight: 400;">Next</a>
+                      }
+                      <!-- Prev page null and Next page available -->
+                      @if(Model.Posts.PreviousPage == null && Model.Posts.NextPage != null)
+                      {
+                        <a href="@Model.Posts.NextPage" class="float-right" style="color: #0395FF; font-size: 14px; font-weight: 400;">Next</a>
+                      }
+                      <!-- Prev page is available no next page -->
+                      @if(Model.Posts.PreviousPage != null && Model.Posts.NextPage == null)
+                      {
+                        <a href="@Model.Posts.PreviousPage" class="float-left" style="color: #0395FF; font-size: 14px; font-weight: 400;">Prev</a> 
+                      }
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+
+
+  <style>
+   li.active {
+      background-color:#0395FF !important;
+    }
+
+    .carousel-indicators{
+      margin-bottom: 0px !important;
+    }
+
+    /* Styles for wrapping the search box */
+
+.main {
+    width: 50%;
+    margin: 50px auto;
+}
+
+/* Bootstrap 4 text input with search icon */
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].valid, input[type="search"]:focus.valid, input[type="datetime-local"].valid, input[type="datetime-local"]:focus.valid, input[type="email"].valid, input[type="email"]:focus.valid, input[type="number"].valid, input[type="number"]:focus.valid, input[type="password"].valid, input[type="password"]:focus.valid, input[type="search-md"].valid, input[type="search-md"]:focus.valid, input[type="search"].valid, input[type="search"]:focus.valid, input[type="tel"].valid, input[type="tel"]:focus.valid, input[type="text"].valid, input[type="text"]:focus.valid, input[type="time"].valid, input[type="time"]:focus.valid, input[type="url"].valid, input[type="url"]:focus.valid, textarea.md-textarea.valid, textarea.md-textarea:focus.valid {
+    border-bottom: none;
+    box-shadow: 0 0 0 0 transparent;
+}
+    input[type="text"]:focus:not([readonly]), input[type="search"]:focus:not([readonly]),  input[type="password"]:focus:not([readonly]) {
+    border: none;
+    box-shadow: 0 0 0 0 transparent;
+}
+
+.category {
+  height: 114px; 
+  background-color:#F5F5F5;
+   border-radius: 5px; 
+   border: 1px solid rgba(196, 196, 196, 0.25); 
+   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05);  
+}
+.category.selected {
+   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);  
+}
+.category .category_dot{
+  font-size: 10px;
+  color: #DF0909;
+  visibility: hidden;
+}
+.category.selected .category_dot{
+  visibility: visible;
+}
+
+.category_header {
+  margin:0rem; 
+  margin-top: -10px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #0395FF;
+}
+.category.selected .category_header{
+  font-weight: 700;
+}
+
+.category_subheader {
+  color: #353535;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.category_subtext {
+  color: #353535;
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.post_item {
+  background-color: #F0F0F0;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+.post_item_image {
+  border-radius: 100%; 
+  height: 40px; 
+  width: 40px;
+}
+
+.post_item_name {
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.post_item_category {
+  color: #0395FF;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.post_item_date {
+  font-size: 14px;
+  color: black;
+  font-weight: 300;
+}
+
+.post_item_subject {
+  color: #262F56;
+  font-size: 16px;
+  font-weight: 600;
+}
+.post_item_subject:hover {
+  color:#0395FF;
+}
+
+.post_item_description_image {
+  height: 100px; 
+  width: 100px; 
+  border-radius: 5px; 
+  margin:10px;
+}
+
+.post_item_description_text {
+  color:black;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 400;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+}
+
+.post_item_link {
+  color: #0395FF;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+    overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+}
+.post_item_link:hover{
+  text-decoration: underline;
+}
+
+.comments-icon{
+  color: #0395FF;
+}
+
+.likes-icon{
+  color:#262F56;
+}
+
+.save-icon{
+  color:#0395FF;
+}
+
+</style>            
+
+<script>
+  var certifyPost = function(baseUrl,postid)
+  {
+    var e = document.getElementById(postid);
+    var e_parent = e.parentElement;
+    fetch(baseUrl +'/posts/certify-post?postid=' + postid, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }})
+    .then(response => response.json())
+    .then(data => {
+      if(data.certified)
+        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: #0395FF; cursor:pointer;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+      else 
+        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: gray; cursor:pointer;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+        })
+    .catch(error => console.error('Unable to get items.', error));
+  }
+  
+   var savePost = function(baseUrl,postid,e)
+  {
+    fetch(baseUrl +'/posts/save-post?postid=' + postid, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }})
+    .then(response => response.json())
+    .then(data => {
+      if(data.saved)
+        e.innerHTML = "bookmark";
+      else 
+        e.innerHTML = "bookmark_border";
+        })
+    .catch(error => console.error('Unable to get items.', error));
+  }
+</script>

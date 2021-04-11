@@ -249,11 +249,13 @@
                   <!-- Post Objects --> 
                     @foreach (var post in Model.Posts.Body)
                     {
-                      var cert_color = post.PostCertificates.Item1 ? "#262F56" : "gray";
-                  <div class="row pb-2 post_item" style="margin-left: 1px;">
-                            <!--Image and name-->
-                            <div class="col-12">
-                              <img class="float-left post_item_image" src="@post.UserImageURI" style="width:50px; height: 50px;">
+                      var cert_color = post.PostCertificates.Item1 ? "#0395FF" : "gray";
+                      var saved_icon = post.PostSaved ? "bookmark" : "bookmark_border";
+
+                      <div class="row pb-2 post_item" style="margin-left: 1px;">
+                      <!--Image and name-->
+                        <div class="col-12">
+                          <img class="float-left post_item_image" src="@post.UserImageURI" style="width:50px; height: 50px;">
                               <p class="float-left pl-3 pt-2 post_item_name" style="text-transform: capitalize;">@post.Post.Username<br> <span class="post_item_category">.@post.Post.CategoryHeader</span></p>
                               <p class="float-right pr-3 pt-2 post_item_date">@post.Post.TimeStamp.GetTimeAgo()</p>
                             </div> 
@@ -282,17 +284,17 @@
                                   </div>
                                   <!-- Comments -->
                                   <div class="comments-icon @postItemIconClass p-0">
-                                    <a asp-action="FullPost" asp-controller="Posts" asp-route-postid="@post.Post.PostId"><p style="font-size: 16px;"><i class="fa fa-comments pr-2"></i>@post.CommentsCount</p></a>
+                                    <p style="font-size: 16px; color: black;"><a asp-action="FullPost" asp-controller="Posts" asp-route-postid="@post.Post.PostId" style="color: black;"><i style="color: #262F56;" class="fa fa-comments pr-2"></i></a>@post.CommentsCount</p>
                                   </div>
                                   <!-- liked -->
                                   <div class="likes-icon @postItemIconClass p-0">
-                                    <p style="font-size: 16px;"><i id="@post.Post.PostId" style="color: @cert_color;" class="fa fa-certificate pr-2 cert_click" onclick="certifyPost('@baseUri','@post.Post.PostId')"></i>@post.PostCertificates.Item2</p>
+                                    <p style="font-size: 16px; color: black;"><i id="@post.Post.PostId" style="color: @cert_color; cursor:pointer;" class="fa fa-certificate pr-2 cert_click" onclick="certifyPost('@baseUri','@post.Post.PostId')"></i>@post.PostCertificates.Item2</p>
                                   </div>
                                  @if(userIsAuthorized)
                                  {
                                     <!-- save post -->
                                     <div class="@postItemIconClass">
-                                      <p style="font-size: 16px;"><i class="material-icons">turned_in_not</i></p>
+                                      <p style="font-size: 16px;"><i style="color: #0395FF; cursor: pointer;" class="material-icons" onclick="savePost('@baseUri','@post.Post.PostId',this)">@saved_icon</i></p>
                                     </div>
                                     <!-- menu -->
                                     <div class="@postItemIconClass">
@@ -302,7 +304,7 @@
                                 </div>
                               </div>
                             </div>
-                  </div>
+                          </div>
                     }       
 
                    @if(Model.SelectedCategory != "all")
@@ -354,6 +356,7 @@
 <script>
   var certifyPost = function(baseUrl,postid)
   {
+    
     var e = document.getElementById(postid);
     var e_parent = e.parentElement;
     fetch(baseUrl +'/posts/certify-post?postid=' + postid, {
@@ -365,9 +368,27 @@
     .then(response => response.json())
     .then(data => {
       if(data.certified)
-        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: #262F56;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: #0395FF; cursor: pointer;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
       else 
-        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: gray;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: gray; cursor: pointer;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+        })
+    .catch(error => console.error('Unable to get items.', error));
+  }
+
+  var savePost = function(baseUrl,postid,e)
+  {
+    fetch(baseUrl +'/posts/save-post?postid=' + postid, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }})
+    .then(response => response.json())
+    .then(data => {
+      if(data.saved)
+        e.innerHTML = "bookmark";
+      else 
+        e.innerHTML = "bookmark_border";
         })
     .catch(error => console.error('Unable to get items.', error));
   }

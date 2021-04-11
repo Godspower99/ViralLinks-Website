@@ -83,4 +83,22 @@ namespace ViralLinks.Data
         public string PostId { get; set; }
         public DateTime TimeStamp { get; set; }
     }
+
+    public class SavedPost
+    {
+        [Key]
+        public long Id { get; set; }
+
+        public string UserId { get; set; }
+        public string PostId { get; set; }
+        public DateTime TimeStamp { get; set; }
+
+        public SavedPost(){}
+        public SavedPost(string userId, string postid)
+        {
+            this.UserId = userId;
+            this.PostId = postid;
+            this.TimeStamp = DateTime.Now;
+        }
+    }
 }

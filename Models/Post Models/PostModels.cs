@@ -13,8 +13,7 @@ namespace ViralLinks.Models
         public int Visits { get; set; }
         public int CommentsCount { get; set; }
         public Tuple<bool,int> PostCertificates { get; set; }
-
-
+        public bool PostSaved { get; set; }
 
         public PostObjectModel(){}
         public PostObjectModel(ApplicationUser user):base(user){}
@@ -30,6 +29,7 @@ namespace ViralLinks.Models
             this.ImageURI = postObjectModel.ImageURI;
             this.UserImageURI = postObjectModel.UserImageURI;
             this.Visits = postObjectModel.Visits;
+            this.PostSaved = postObjectModel.PostSaved;
         }
 
     }
@@ -45,6 +45,7 @@ namespace ViralLinks.Models
         public List<PostCommentObjectModel> Comments { get; set; }
 
         public Tuple<bool,int> PostCertificates { get; set; }
+        public bool PostSaved { get; set; }
 
         public FullPostObjectModel()
         {
@@ -70,6 +71,7 @@ namespace ViralLinks.Models
             this.CreatePostComment = new CreatePostCommentModel();
             this.Comments = postObjectModel.Comments;
             this.CommentsCount = postObjectModel.Comments.Count;
+            this.PostSaved = postObjectModel.PostSaved;
         }
     }
 

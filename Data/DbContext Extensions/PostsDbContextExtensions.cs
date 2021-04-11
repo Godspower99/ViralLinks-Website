@@ -16,7 +16,7 @@ namespace ViralLinks.Data
             return await dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == id);
         }
 
-        public static async Task<PostObjectModel> FindPostObjecModel(this ApplicationDbContext dbContext, string id, FileSystemService fileSystem)
+        public static async Task<PostObjectModel> FindPostObjecModel(this ApplicationDbContext dbContext, string id, FileSystemService fileSystem, string userid = "guest")
         {
             var post = await dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == id);
             if(post != null)
@@ -27,12 +27,13 @@ namespace ViralLinks.Data
                 {
                     CommentsCount = await dbContext.PostCommentCount(post.PostId),
                     Visits = await dbContext.PostVisitCount(post.PostId),
+                    PostSaved = await dbContext.GetSavedPostStatus(id,userid)
                 };
             }
             return null;
         }
 
-        public static async Task<FullPostObjectModel> FindFullPostObjectModel(this ApplicationDbContext dbContext, string id, FileSystemService fileSystem,UserManager<ApplicationUser> userManager)
+        public static async Task<FullPostObjectModel> FindFullPostObjectModel(this ApplicationDbContext dbContext, string id, FileSystemService fileSystem,UserManager<ApplicationUser> userManager, string userid = "guest")
         {
             var post = await dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == id);
             if(post != null)
@@ -46,6 +47,7 @@ namespace ViralLinks.Data
                     Visits = await dbContext.PostVisitCount(post.PostId),
                     Comments = comments,
                     CommentsCount = comments.Count,
+                    PostSaved = await dbContext.GetSavedPostStatus(id,userid),
                 };                
             }
             return null;
@@ -72,6 +74,7 @@ namespace ViralLinks.Data
                     Visits = dbContext.PostVisitCount(p.PostId).GetAwaiter().GetResult(),
                     CommentsCount = dbContext.PostCommentCount(p.PostId).GetAwaiter().GetResult(),
                     PostCertificates = dbContext.GetPostCertificate(p.PostId,userid).GetAwaiter().GetResult(),
+                    PostSaved = dbContext.GetSavedPostStatus(p.PostId,userid).GetAwaiter().GetResult(),
                 };
             }).ToList();
         }
@@ -86,10 +89,29 @@ namespace ViralLinks.Data
                     Visits = dbContext.PostVisitCount(p.PostId).GetAwaiter().GetResult(),
                     CommentsCount = dbContext.PostCommentCount(p.PostId).GetAwaiter().GetResult(),
                     PostCertificates = dbContext.GetPostCertificate(p.PostId,userid).GetAwaiter().GetResult(),
+                    PostSaved = dbContext.GetSavedPostStatus(p.PostId,userid).GetAwaiter().GetResult(),
                 };
             }).ToList();
         }
 
+        public static async Task<List<PostObjectModel>> GetSavedPostsObjectModels(this ApplicationDbContext dbContext, FileSystemService fileSystem, string userid = "guest", int amount = 10)
+        {
+            var savedPosts = await dbContext.GetSavedPosts(userid);
+            var posts = new List<Post>();
+            foreach(var s in savedPosts)
+                posts.Add(await dbContext.FindPost(s));
+            return posts.Select<Post,PostObjectModel>(p => {
+                var userImageUri = fileSystem.GetProfilePictureAsync(p?.UserId);
+                var postImageUri = fileSystem.GetPostImageAsync(p?.PostId);
+                return new PostObjectModel(p,postImageUri,userImageUri)
+                {
+                    Visits = dbContext.PostVisitCount(p?.PostId).GetAwaiter().GetResult(),
+                    CommentsCount = dbContext.PostCommentCount(p?.PostId).GetAwaiter().GetResult(),
+                    PostCertificates = dbContext.GetPostCertificate(p?.PostId,userid).GetAwaiter().GetResult(),
+                    PostSaved = dbContext.GetSavedPostStatus(p.PostId,userid).GetAwaiter().GetResult(),
+                };
+            }).ToList();
+        }
 
         public static async Task<int> GetPostsCount(this ApplicationDbContext dbContext, string category ="all")
         {
@@ -219,6 +241,35 @@ namespace ViralLinks.Data
             var count = await dbContext.GetPostCertificateCount(postid);
             var certified = userid == "guest" ? false : await dbContext.PostCertificates.AnyAsync(pc => pc.PostId == postid && pc.UserId == userid);
             return Tuple.Create<bool,int>(item1: certified, item2: count);
+        }
+
+        public static async Task<int> GetSavedPostsCount(this ApplicationDbContext dbContext, string userid)
+        {
+            return await dbContext.SavedPosts.Where(sp => sp.UserId == userid).CountAsync();
+        }
+        public static async Task<bool> UpdateSavedPost(this ApplicationDbContext dbContext, string postid, string userid)
+        {
+            // add new saved post if none is found
+            var savedPost = await dbContext.SavedPosts.Where(s => s.PostId == postid && s.UserId == userid).ToListAsync();
+            if(savedPost.Count == 0)
+            {
+                await dbContext.SavedPosts.AddAsync(new SavedPost(userid,postid));
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            dbContext.SavedPosts.RemoveRange(savedPost);
+            await dbContext.SaveChangesAsync();
+            return false;
+        }
+
+        public static async Task<bool> GetSavedPostStatus(this ApplicationDbContext dbContext, string postid, string userid)
+        {
+            return await dbContext.SavedPosts.AnyAsync(p => p.PostId == postid && p.UserId == userid);
+        }
+
+        public static async Task<List<string>> GetSavedPosts(this ApplicationDbContext dbContext, string userid)
+        {
+            return await dbContext.SavedPosts.Where(p => p.UserId == userid).Select(p => p.PostId).ToListAsync();
         }
     }
 }

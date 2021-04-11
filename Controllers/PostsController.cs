@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using ViralLinks.Data;
 using ViralLinks.InternalServices;
 using ViralLinks.Models;
+using ViralLinks.Helpers;
+
 
 namespace ViralLinks
 {
@@ -16,8 +18,10 @@ namespace ViralLinks
         private ApplicationDbContext context;
         private UserManager<ApplicationUser> userManager;
         private FileSystemService fileSystemService;
+        private IUrlGenerator urlGenerator;
+
         public PostsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager,
-            FileSystemService fileSystemService)
+            FileSystemService fileSystemService, IUrlGenerator urlGenerator)
         {
             this.context = dbContext ??
                 throw new ArgumentNullException(nameof(dbContext));
@@ -25,6 +29,8 @@ namespace ViralLinks
                 throw new ArgumentNullException(nameof(userManager));
             this.fileSystemService = fileSystemService ??
                 throw new ArgumentNullException(nameof(fileSystemService));
+            this.urlGenerator = urlGenerator ??
+                throw new ArgumentNullException(nameof(urlGenerator));
         }
 
         [HttpGet, Route("guest")]
@@ -49,7 +55,7 @@ namespace ViralLinks
                 return RedirectToAction(actionName: "SignOut", controllerName: "Account");
             }
             var userProfilePic = fileSystemService.GetProfilePictureAsync(user.Id);
-            var post = await context.FindFullPostObjectModel(postid,fileSystemService,userManager);
+            var post = await context.FindFullPostObjectModel(postid,fileSystemService,userManager,user.Id);
             if(post == null)
             {
                 // TODO :: Redirect to 404 page with returnUrl
@@ -206,5 +212,62 @@ namespace ViralLinks
                 certified = cert_info.Item1,
             });
         }
+
+        [HttpPost, Route("save-post"), Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
+        public async Task<ActionResult> SavePost(string postid)
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if(user == null)
+            {
+                return RedirectToAction(actionName:"SignOut",controllerName:"Account");
+            }
+            var post = await context.FindPost(postid);
+            if(post == null)
+            {
+                return BadRequest();
+            }
+            var savedPost = await context.UpdateSavedPost(postid,user.Id);
+            return new JsonResult(new {
+                saved = savedPost
+            });
+        }
+
+        [HttpGet, Route("save-post"), Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
+        public async Task<ActionResult> GetSavedPostDetail(string postid)
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if(user == null)
+            {
+                return RedirectToAction(actionName:"SignOut",controllerName:"Account");
+            }
+            var post = await context.FindPost(postid);
+            if(post == null)
+            {
+                return BadRequest();
+            }
+            var savedDetails = await context.GetSavedPostStatus(postid,user.Id);
+            return new JsonResult(new {
+                saved = savedDetails,
+            });
+        }
+
+        [HttpGet, Route("saved"), Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
+        public async Task<ActionResult> SavedLinks([FromQuery]PaginationFilter paginationFilter)
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if(user == null)
+            {
+                return RedirectToAction(actionName:"SignIn", controllerName: "Account");
+            }
+            var userPic = fileSystemService.GetProfilePictureAsync(user.Id);
+            var viewModel = new ProfileModel(user,userPic);
+
+            var route = HttpContext.Request.Path;
+            var validFilter = new PaginationFilter(pageNumber: paginationFilter.PageNumber, pageSize: paginationFilter.PageSize);
+            var posts = await this.context.GetSavedPostsObjectModels(fileSystemService,user.Id,validFilter.PageSize);
+            var postsCount = await this.context.GetSavedPostsCount(user.Id);
+            viewModel.Posts = PaginationHelpers<PostObjectModel>.CreatePagedResponse(posts, validFilter,postsCount,urlGenerator,route);
+            return View(model: viewModel);
+        } 
     }
 }

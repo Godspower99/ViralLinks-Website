@@ -33,7 +33,7 @@ namespace ViralLinks
         }
 
         [HttpGet,Route("profile"),Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
-        public async Task<ActionResult> Profile([FromQuery]PaginationFilter paginationFilter)
+        public async Task<ActionResult> ProfilePage([FromQuery]PaginationFilter paginationFilter)
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
             if(user == null)

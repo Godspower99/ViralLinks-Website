@@ -13,6 +13,7 @@ namespace ViralLinks.Data
         public DbSet<PostLinkVisits> PostLinkVisits { get; set; }
         public DbSet<PostComment> PostComments { get; set; }
         public DbSet<PostCertificate> PostCertificates { get; set; }
+        public DbSet<SavedPost> SavedPosts { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options){}
 

@@ -1,5 +1,6 @@
 @using System.Security.Claims
 @model ProfileModel;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewBag.Title = Model.User.UserName;
@@ -48,7 +49,7 @@
     <div class="row pt-0">
         <div class="col-md-3"></div>
         <div class="col-md-6 text-center">
-            <p style="font-weight: 400;font-size: 14px; color:#505050; text-decoration: underline" >View saved links</p>
+            <a href="@baseUri/posts/saved"><p style="font-weight: 400;font-size: 14px; color:#505050; text-decoration: underline" >View saved links</p></a>
         </div>
         <div class="col-md-3"></div>
     </div>
@@ -155,35 +156,25 @@
         <div class="col-md-3"></div>
     </div>
 
-    @* <!-- Create Post Button -->
-    <div class="row pt-3">
-        <div class="col-md-3"></div>
-        <div class="col-md-6 text-center" style="color: #989898;margin-left: 1rem;margin-right: 1rem;">
-            <a href="@baseUri/posts/create-post" class="btn pt-1" style="color: #E0E0E0 !important; background-color: #0395FF;width: 166px;height: 32px;border-radius: 15px;font-size: 18px;font-weight: 400;"> 
-                Create a Post
-            </a>
-        </div>
-        <div class="col-md-3"></div>
-    </div> *@
-
-    <!-- Posts by user -->
-    <div class="row pt-4">
+    <!-- Posts -->
+            <div class="row pt-4">
               <div class="col-md-3"></div>
               <div class="col-md-6">
                 <div class="container p-0">    
                   <!-- Posts Header -->
-                  <div class="row pb-4 pt-2">
+                  <div class="row pb-2" style="margin-left: 1px;">
                     <div class="col-12">
-                      <p class="text-left float-left pl-4" style="color: black; font-size: 18.75px; font-weight: 400;">Your links (@Model.Posts.TotalRecords.GetPostsCount())</p>
+                      <p class="text-left float-left pl-4" style="color: black; font-size: 16px; margin-left: 10px; font-weight: 400;">Your links (@Model.Posts.TotalRecords.GetPostsCount())</p>
                     </div> 
 
                   </div>
-
                   <!-- Post Objects --> 
                     @foreach (var post in Model.Posts.Body)
                     {
-                      var cert_color = post.PostCertificates.Item1 ? "#262F56" : "gray";
-                  <div class="row pb-2 post_item" style="margin-left: 1px;">
+                      var cert_color = post.PostCertificates.Item1 ? "#0395FF" : "gray";
+                      var saved_icon = post.PostSaved ? "bookmark" : "bookmark_border";
+
+                      <div class="row pb-2 post_item" style="margin-left: 1px;">
                             <!--Image and name-->
                             <div class="col-12">
                               <img class="float-left post_item_image" src="@post.UserImageURI" style="width:50px; height: 50px;">
@@ -201,8 +192,8 @@
                             </div>
                             <!--Link-->
                             <div class="col-12 text-left pt-0">
-                              <a asp-action="GotoPostLink" asp-controller="Posts" asp-route-postid="@post.Post.PostId" target="_blank">
-                               <p class="post_item_link">@post.Post.PostLink</p>
+                              <a href="@baseUri/posts/goto?postid=@post.Post.PostId" target="_blank">
+                                 <p class="post_item_link">@post.Post.PostLink</p>
                               </a>
                             </div>                      
                             <!-- icons -->              
@@ -215,29 +206,28 @@
                                   </div>
                                   <!-- Comments -->
                                   <div class="comments-icon @postItemIconClass p-0">
-                                    <a asp-action="FullPost" asp-controller="Posts" asp-route-postid="@post.Post.PostId"><p style="font-size: 16px;"><i class="fa fa-comments pr-2"></i>@post.CommentsCount</p></a>
+                                    <p style="font-size: 16px; color: black;"><a href="@baseUri/posts/member?postid=@post.Post.PostId" style="color: black;"><i style="color: #262F56;" class="fa fa-comments pr-2"></i></a>@post.CommentsCount</p>
                                   </div>
                                   <!-- liked -->
                                   <div class="likes-icon @postItemIconClass p-0">
-                                    <p style="font-size: 16px;"><i id="@post.Post.PostId" style="color: @cert_color;" class="fa fa-certificate pr-2 cert_click" onclick="certifyPost('@baseUri','@post.Post.PostId')"></i>@post.PostCertificates.Item2</p>
+                                    <p style="font-size: 16px; color: black;"><i id="@post.Post.PostId" style="color: @cert_color; cursor:pointer;" class="fa fa-certificate pr-2 cert_click" onclick="certifyPost('@baseUri','@post.Post.PostId')"></i>@post.PostCertificates.Item2</p>
                                   </div>
-                                 @if(userIsAuthorized)
-                                 {
+                                  @if(userIsAuthorized)
+                                  {
                                     <!-- save post -->
                                     <div class="@postItemIconClass">
-                                      <p style="font-size: 16px;"><i class="material-icons">turned_in_not</i></p>
+                                      <p style="font-size: 16px;"><i style="color: #0395FF; cursor: pointer;" class="material-icons" onclick="savePost('@baseUri','@post.Post.PostId',this)">@saved_icon</i></p>
                                     </div>
                                     <!-- menu -->
                                     <div class="@postItemIconClass">
                                       <p style="font-size: 16px;"><i class="fa fa-ellipsis-v" style="color: #0395FF;"></i></p>
                                     </div>
-                                 }
+                                  }
                                 </div>
                               </div>
                             </div>
-                  </div>
-                    }       
-
+                      </div>
+                    }                 
                   <!-- Posts Footer -->
                   <div class="row pb-2" style="margin-left: 1px;">
                     <div class="col-12 text-center">
@@ -248,8 +238,6 @@
                       }
                      
                         <a href="#" class="mr-2" style="color: #0395FF; font-size: 14px; font-weight: 400;">Back to top</a> 
-                     
-
                       <!-- Next and previous Page Available -->
                       @if(Model.Posts.PreviousPage != null && Model.Posts.NextPage != null)
                       {
@@ -269,11 +257,13 @@
 
                     </div>
                   </div>
+                </div>
               </div>
               <div class="col-md-3"></div>
-            </div> 
+            </div>
 
-    <!-- Upload picture script -->
+
+   <!-- Upload picture script -->
 <script defer>
 
     var upload_button = document.getElementById('upload-button');
@@ -489,11 +479,28 @@ input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].v
     .then(response => response.json())
     .then(data => {
       if(data.certified)
-        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: #262F56;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: #0395FF; cursor:pointer;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
       else 
-        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: gray;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
+        e_parent.innerHTML = "<i id=\"" +postid+ "\" onclick=\"certifyPost('" +baseUrl+ "','" +postid+ "')\" style=\" color: gray; cursor:pointer;\" class=\"fa fa-certificate pr-2 cert_click \"></i>" + data.count;
         })
     .catch(error => console.error('Unable to get items.', error));
   }
   
+   var savePost = function(baseUrl,postid,e)
+  {
+    fetch(baseUrl +'/posts/save-post?postid=' + postid, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }})
+    .then(response => response.json())
+    .then(data => {
+      if(data.saved)
+        e.innerHTML = "bookmark";
+      else 
+        e.innerHTML = "bookmark_border";
+        })
+    .catch(error => console.error('Unable to get items.', error));
+  }
 </script>
