@@ -3,6 +3,7 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
+    Layout = "_ProfileLayout";
     ViewBag.Title = Model.User.UserName;
     ViewBag.BackgroundColor = "#F5F5F5";
     var request = Context.Request;
@@ -10,12 +11,17 @@
     var role = Context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
     var userRole = role == Roles.Member ? "Regular member" : role == Roles.VIP ? "VIP member" :
         role == Roles.Admin ? "Admin" : "Guest";
-    var upgradeText = role == Roles.Member ? "Upgrade to VIP" : "";
+    var upgradeText = role == Roles.Member ? "Upgrade to VIP" : "<i class=\"material-icons\" style=\"color:#0395FF;\">verified</i>";
     var userIsAuthorized = Context.User.Identity.IsAuthenticated;
     var postItemIconClass = userIsAuthorized? "col-2" : "col-4 text-center";
+
+    var bank = string.IsNullOrWhiteSpace(Model.User.Bank) ? "Enter Bank" : Model.User.Bank;
+    var acctName = string.IsNullOrWhiteSpace(Model.User.AccountName) ? "Enter Account Name" : Model.User.AccountName;
+    var acctNumber = string.IsNullOrWhiteSpace(Model.User.AccountNumber) ? "Enter Account Number" : Model.User.AccountNumber;
+
 }
 
-    <!-- profile picture upload -->
+    @* <!-- profile picture upload -->
     <div class="row pt-1">
         <div class="col-3 col-md-5"></div>
         <div class="col-6 col-md-2"  id="profile-picture"
@@ -34,7 +40,31 @@
             </div>
         </div>
         <div class="col-3 col-md-5"></div>
-    </div>
+    </div> *@
+
+            <!-- profile picture upload -->
+                <div class="row pt-1">
+                    <div class="col-3 col-md-5"></div>
+                    <div class="col-6 col-md-2"  id="profile-picture"
+                        style="background-image: url(@Model.ProfilePicture);height: 200px;width: 200px;border-radius: 5000px;background-repeat: no-repeat;background-position: center;background-size: 100% 100%;background-origin: border-box;">
+                        <div class="container p-0">
+                            <div class="row">
+                                <form enctype="multipart/form-data" id="pictureForm" asp-action="UpdateProfilePicture" asp-controller="User" method="POST">
+                                  <input id="photo-input" type="file" asp-for="ProfilePictureUpdate" hidden/>
+                                </form>
+                                <div class="col-12" style="height: 75px;"></div>
+                                <div class="col-12" style="height: 75px; background-color: transparent;"></div>
+                                <div class="col-12 p-0" style="height: 50px; background-color: transparent;">
+                                    <div id="upload-button" class="float-right" style="height: 50px; width: 50px; background-color: transparent;border-radius: 100px;margin-right: 0px;padding-bottom: 0rem;margin-top: 0px; cursor:pointer;">
+                                        <i class="material-icons" style="font-size: 40px; color: #262F56;">camera_alt</i>
+                                    </div>                            
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3 col-md-5"></div>
+                </div>
+
 
     <!-- Username -->
     <div class="row pt-3">
@@ -70,7 +100,7 @@
                     <div class="col-4 col-md-3 text-center form-control" style="color: #505050;margin-right: 2rem;
                         border-top-width: 1px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
                         padding-bottom: 3rem;font-size: 14px;background-color: #F0F0F0;">
-                        <p style="text-decoration: underline;" class="pt-2">Upgrade to VIP</p>
+                        <p style="text-decoration: underline;" class="pt-2">@upgradeText</p>
                     </div>
                     <div class="col-md-2"></div>
                 </div>
@@ -94,10 +124,8 @@
                     </div>
                     <div style="color: #0395FF;margin-right: 0rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
-                        padding-bottom: 3rem;font-size: 14px;" class="col-1 col-md-1 text-center form-control"><div style="border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 4px;border-bottom-color: red;
-                            padding-bottom: 0rem;" class="text-center pt-2">
-                            <i class="material-icons" style="font-size: 20px;">border_color</i>
-                        </div>
+                        padding-bottom: 3rem;font-size: 14px;" class="col-1 col-md-1 text-center form-control">
+                        
                     </div>
                     <div class="col-md-2"></div>
                 </div>
@@ -116,17 +144,17 @@
                     <div class="col-md-2"></div>
                     <div style="color: #000000;margin-left: 2rem; line-height:0.5;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
-                        padding-bottom: 3rem;font-size: 14px; font-weight: 400;height: 120px;" class="col-9 col-md-7 text-left form-control">
+                        padding-bottom: 3rem;font-size: 14px; font-weight: 400;height: 150px;" class="col-9 col-md-7 text-left form-control">
                         <p style="font-weight: 500" class="pt-3 pl-2">Account Details</p>
-                        <p class="pl-2 pt-1">Bank: @Model.User.Bank</p>
-                        <p class="pl-2">Account Number: @Model.User.AccountNumber</p>
-                        <p class="pl-2">Account Name: @Model.User.AccountName</p>
+                        <p style="font-size:0.8rem;" class="pl-2 pt-1">Bank: <input id="bank" style="border: 0; background-color: transparent;" value="@bank" disabled/></p>
+                        <p style="font-size: 0.8rem;" class="pl-2">Account Number: <input id="acctNum" style="border: 0; background-color: transparent;" value="@acctNumber" disabled/></p>
+                        <p style="font-size: 0.8rem;" class="pl-2">Account Name: <input id="acctName" style="border: 0; background-color: transparent;" value="@acctName" disabled/></p>
                     </div>
                     <div style="color: #0395FF;margin-right: 0rem;
                         border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
-                        padding-bottom: 3rem;font-size: 14px;height: 120px;" class="col-1 col-md-1 text-center form-control"><div style="border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 4px;border-bottom-color: red;
+                        padding-bottom: 3rem;font-size: 14px;height: 150px;" class="col-1 col-md-1 text-center form-control"><div style="border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 4px;border-bottom-color: red;
                             padding-bottom: 0rem;" class="text-center pt-5">
-                            <i class="material-icons" style="font-size: 20px;">border_color</i>
+                            <i id="bankAcctBtn" onclick="editBankAccount()" class="material-icons" style="font-size: 20px; cursor: pointer;">border_color</i>
                         </div>
                     </div>
                     <div class="col-md-2"></div>
@@ -137,17 +165,15 @@
     </div>
 
     <!-- Change Password -->
-    <div class="row pt-0" style="margin-top: -20px;">
+    <div class="row pt-0">
         <div class="col-md-3"></div>
         <div class="col-md-6 text-center">
             <div class="container">
                 <!--Email-->
                 <div class="row">
                     <div class="col-md-2"></div>
-                    <div style="color: #000000;margin-left: 2rem;
-                        border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 1px;border-bottom-color: #C4C4C4;
-                        padding-bottom: 3rem;font-size: 14px; font-weight: 400" class="col-10 col-md-8 text-left form-control">
-                        <p class="pt-2 pl-2">Change password</p>
+                    <div style="color: #000000; padding-bottom: 3rem;font-size: 14px; font-weight: 400" class="col-10 col-md-8 text-left">
+                        <a asp-action="ChangePassword" asp-controller="Account" class="pt-2 pl-3" style="color:#262F56">Change password</a>
                     </div>
                     <div class="col-md-2"></div>
                 </div>
@@ -263,26 +289,87 @@
             </div>
 
 
+<script>
+
+    var editBankAccount = function() {
+        var bank = document.getElementById('bank');
+        var acctNum = document.getElementById('acctNum');
+        var acctName = document.getElementById('acctName');
+        var btn = document.getElementById('bankAcctBtn');
+
+        // Change styles / allow editing
+        bank.disabled = false;
+        bank.style.borderWidth = "1px";
+        bank.style.borderStyle = "dashed"
+        acctName.disabled = false;
+        acctName.style.borderWidth = "1px";
+        acctName.style.borderStyle = "dashed"
+        acctNum.disabled = false;
+        acctNum.style.borderWidth = "1px";
+        acctNum.style.borderStyle = "dashed";
+        btn.textContent = "save";
+        btn.onclick = saveBankAccount;
+    }
+
+    var saveBankAccount = function (baseUrl) {
+        var bank = document.getElementById('bank');
+        var acctNum = document.getElementById('acctNum');
+        var acctName = document.getElementById('acctName');
+        var btn = document.getElementById('bankAcctBtn');
+
+        // Change styles adn allow editing
+        bank.disabled = true;
+        bank.style.borderWidth = "0px";
+        bank.style.borderStyle = "dashed"
+        acctName.disabled = true;
+        acctName.style.borderWidth = "0px";
+        acctName.style.borderStyle = "dashed"
+        acctNum.disabled = true;
+        acctNum.style.borderWidth = "0px";
+        acctNum.style.borderStyle = "dashed";
+
+        var host = window.location.protocol + "//" + window.location.host;
+        // save bank account details
+        fetch( host + '/user/save-bank-details?bank=' + bank.value + '&acctName=' + acctName.value + '&acctNumber=' + acctNum.value, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+                bank.value = data.bank;
+                acctName.value = data.accountName;
+                acctNum.value = data.accountNumber;
+        })
+        .catch(error => console.error('Unable to get items.', error));
+        btn.textContent = "border_color";
+        btn.onclick = editBankAccount;
+    }
+</script>
+
    <!-- Upload picture script -->
 <script defer>
 
     var upload_button = document.getElementById('upload-button');
     var photo_input = document.getElementById('photo-input');
     var photo = document.getElementById("profile-picture");
+    var form = document.getElementById('pictureForm');
 
-     var readURL = function(input) {
+      var readURL = async function(input) {
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                photo.style.backgroundImage ="url(" + e.target.result + ")";
+            form.submit();
+          @* var reader = new FileReader();
+          reader.onload = function (e) {
+              photo.style.backgroundImage ="url(" + e.target.result + ")";
             }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+        reader.readAsDataURL(input.files[0]); *@
+      }
+      }
 
-    photo_input.onchange = function(e){
-        readURL(this);
+    photo_input.onchange = async function(e){
+        await readURL(this);
     }
 
     upload_button.onclick = function(e) {
@@ -504,3 +591,30 @@ input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].v
     .catch(error => console.error('Unable to get items.', error));
   }
 </script>
+
+<!-- Upload picture script -->
+@* <script defer>
+
+    var upload_button = document.getElementById('upload-button');
+    var photo_input = document.getElementById('photo-input');
+    var photo = document.getElementById("profile-picture");
+
+     var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                photo.style.backgroundImage ="url(" + e.target.result + ")";
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    photo_input.onchange = function(e){
+        readURL(this);
+    }
+
+    upload_button.onclick = function(e) {
+        photo_input.click();
+    };
+
+</script> *@

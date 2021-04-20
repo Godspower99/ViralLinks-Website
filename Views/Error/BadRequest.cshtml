@@ -1,0 +1,14 @@
+@model HomePageModel
+@{
+    Layout = "_GuestLayout";
+    ViewBag.Title = "Home";
+    var request = Context.Request;
+    var baseUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+    ViewBag.BackgroundColor = "#F5F5F5";
+}
+
+<div class="row">
+    <div class="col text-center">
+        <h3>BAD REQUEST <br> Status Code 400</h3>
+    </div>
+</div>

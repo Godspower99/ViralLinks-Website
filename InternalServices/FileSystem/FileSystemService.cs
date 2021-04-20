@@ -135,7 +135,7 @@ namespace ViralLinks.InternalServices
             }
         }
 
-        public async Task UpdateProfilePicture(ApplicationUser user, FileStream fileStream, string name, string extension)
+        public async Task UpdateProfilePicture(ApplicationUser user, Stream fileStream, string name, string extension)
         {
             var uri = await this.UploadBlob(fileStream, AzureStorageConfig.ProfilePicturesContainer,user.Id);
             var metaData = await dbContext.FileMetaDatas.FirstOrDefaultAsync(fm => fm.Id == user.Id);

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using System;
 using System.Threading.Tasks;
@@ -8,6 +9,9 @@ using ViralLinks.Data;
 using ViralLinks.InternalServices;
 using ViralLinks.Models;
 using ViralLinks.Helpers;
+using Microsoft.AspNetCore.Http;
+using ViralLinks.ValidationAttributes;
+using System.IO;
 
 namespace ViralLinks
 {
@@ -49,6 +53,51 @@ namespace ViralLinks
             var postsCount = await this.dbContext.GetUserPostsCount(user.Id);
             viewModel.Posts = PaginationHelpers<PostObjectModel>.CreatePagedResponse(posts, validFilter,postsCount,urlGenerator,route);
             return View(model: viewModel);
+        }
+        
+        [HttpPost("save-bank-details"), Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
+        public async Task<ActionResult> SaveBankDetails(string bank,string acctName,string acctNumber)
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if(user == null)
+            {
+                return BadRequest();
+            }
+
+            // bank account details available
+            if(!string.IsNullOrWhiteSpace(bank) && !string.IsNullOrWhiteSpace(acctName) && !string.IsNullOrWhiteSpace(acctNumber))
+            {
+                user.Bank = bank;
+                user.AccountName = acctName;
+                user.AccountNumber = acctNumber;
+                await userManager.UpdateAsync(user);
+            }
+
+            return new JsonResult(new
+            {
+                Bank = user.Bank,
+                AccountName = user.AccountName,
+                AccountNumber = user.AccountNumber,
+            });
+        }
+
+        [HttpPost("update-profile-picture"),Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
+        public async Task<ActionResult> UpdateProfilePicture([FromForm]ProfileModel model)
+        {
+            Console.WriteLine("Trying to upload picture");
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if(user == null || model == null || model.ProfilePictureUpdate == null)
+            {
+                var errMsg = user == null ? "USER" : model.ProfilePictureUpdate == null ? "FILE" : "UNKNOW";
+                Console.WriteLine("Bad Request {0}",errMsg);
+                return BadRequest();
+            }
+
+            Console.WriteLine("Uploading File");
+            await fileSystemService.UpdateProfilePicture(user,model.ProfilePictureUpdate);
+            
+            // okay
+            return RedirectToAction(controllerName:"User",actionName:"ProfilePage");
         }
     }
 }

@@ -11,7 +11,7 @@
    var cert_color = Model.PostCertificates.Item1 ? "#0395FF" : "gray";
    var saved_icon = Model.PostSaved ? "bookmark" : "bookmark_border";
 }
-
+<link rel="stylesheet" href="~/css/pen.css">
             <!-- Feeds for you -->
             <div class="row pt-0">
               <div class="col-md-3"></div>
@@ -55,9 +55,20 @@
                                     <div class="@postItemIconClass">
                                       <p style="font-size: 16px;"><i style="color: #0395FF; cursor: pointer;" class="material-icons" onclick="savePost('@baseUri','@Model.Post.PostId',this)">@saved_icon</i></p>
                                     </div>
-                                    <!-- menu -->
+                                    @* <!-- menu -->
                                     <div class="@postItemIconClass">
                                       <p style="font-size: 16px;"><i class="fa fa-ellipsis-v" style="color: #0395FF;"></i></p>
+                                    </div> *@
+                                    <div class="@postItemIconClass">
+                                      <a class="drop">
+                                        <svg class="icon" enable-background="new 0 0 24 24" id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="12" cy="12" r="2"></circle><circle cx="12" cy="5" r="2"></circle><circle cx="12" cy="19" r="2"></circle></svg>
+                                      </a>
+                                      <div class="dd-menu">
+                                        <ul>
+                                          <li>Report</li>
+                                          <li>Delete</li>
+                                        </ul>
+                                      </div>
                                     </div>
                                  }
                                 </div>
@@ -251,3 +262,31 @@
   cursor: pointer;
 }
  </style>
+
+
+
+ <script>
+$('html').click(function() {
+  $('.dd-menu').removeClass("active");
+});
+
+$('.dd-menu ul li').each(function() {
+    var delay = $(this).index() * 50 + 'ms';
+
+    $(this).css({
+        '-webkit-transition-delay': delay,
+        '-moz-transition-delay': delay,
+        '-o-transition-delay': delay,
+        'transition-delay': delay
+    });                  
+});
+
+$(".drop").click (function(e){
+  e.stopPropagation();
+  $('.dd-menu').toggleClass("active");
+});
+
+ $('.dd-menu').click (function(e){
+  e.stopPropagation();
+});
+ </script>

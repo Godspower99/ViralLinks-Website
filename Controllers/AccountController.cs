@@ -276,10 +276,10 @@ namespace ViralLinks.Controllers
             if(result.Succeeded)
             {
                 // TODO :: REDIRECT TO PASSWORD RESET COMPLETED PAGE
-                return Redirect("/account/reset-password/completed");
+                return RedirectToAction(actionName: "ResetPasswordCompleted", controllerName: "Account");
             }
             // TODO :: REDIRECT TO BAD REQUEST PAGE
-            return Redirect("/home");
+            return RedirectToAction(actionName: "BadRequest", controllerName: "Error");
         }
 
         [HttpGet, Route("reset-password")]
@@ -306,6 +306,51 @@ namespace ViralLinks.Controllers
         public ActionResult ResetPasswordCompleted()
         {
             return View();
+        }
+
+        [HttpGet("change-password"),Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
+        public async Task<ActionResult> ChangePassword()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if(user == null)
+            {
+                return RedirectToAction(controllerName:"Account", actionName:"SignOut");
+            }
+            var pic = fileSystemService.GetProfilePictureAsync(user.Id);
+            return View(model: new ChangePasswordModel(user,pic));
+        }
+
+        [HttpPost("change-password"), Authorize(AuthorizationPolicies.AuthenticatedPolicy),AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if(user == null)
+            {
+                return RedirectToAction(controllerName:"Account", actionName: "SignOut");
+            }
+            if(!ModelState.IsValid)
+            {
+                return View(model: model);
+            }
+            var res = await userManager.ChangePasswordAsync(user,model.CurrentPassword,model.NewPassword);
+            if(!res.Succeeded)
+            {
+                return View(model);
+            }
+            return RedirectToAction(controllerName: "Account", actionName: "ChangePasswordCompleted");
+        }
+
+        [HttpGet("change-password-completed"),Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
+        public async Task<ActionResult> ChangePasswordCompleted()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if(user == null)
+            {
+                return RedirectToAction(controllerName: "Account", actionName:"SignOut");
+            }
+            var profilePic = fileSystemService.GetProfilePictureAsync(user.Id);
+            var profile = new ProfileModel(user,profilePic);
+            return View(model: profile);
         }
 
         public async Task<ActionResult> Delete(string email)
