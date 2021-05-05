@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -230,6 +231,62 @@ namespace ViralLinks
             return new JsonResult(new {
                 saved = savedPost
             });
+        }
+
+        [HttpGet("edit-post"), Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
+        public async Task<ActionResult> EditPost(string postid)
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if(user == null)
+            {
+                return RedirectToAction(actionName:"SignOut",controllerName:"Account");
+            }
+            var post = await context.FindPost(postid);
+            if(post == null)
+            {
+                return RedirectToAction(actionName:"BadRequest", controllerName: "Error");
+            }
+
+            // verify user owns post
+            if(user.Id != post.UserId)
+            {
+                return RedirectToAction(actionName:"BadRequest", controllerName: "Error");
+            }
+            var pic = fileSystemService.GetProfilePictureAsync(user.Id);
+            var model = new EditPostModel(user,pic,post);
+            return View(model: model);
+        }
+
+        [HttpPost("edit-post"), Authorize(AuthorizationPolicies.AuthenticatedPolicy)]
+        public async Task<ActionResult> EditPost(EditPostModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if(user == null)
+            {
+                return RedirectToAction(actionName:"SignOut",controllerName:"Account");
+            }
+            var post = await context.FindPost(model.PostID);
+            if(post == null)
+            {
+                return RedirectToAction(actionName:"BadRequest", controllerName: "Error");
+            }
+            // verify user owns post
+            if(user.Id != post.UserId)
+            {
+                return RedirectToAction(actionName:"BadRequest", controllerName: "Error");
+            }
+            post.Subject = model.Subject;
+            post.Description = model.Description;
+            post.PostLink = model.Link;
+
+            await context.UpdatePost(post);
+            await fileSystemService.UploadPostImage(model,post);
+
+            return RedirectToAction(actionName: "FullPost", controllerName: "Posts", routeValues: new {postid = post.PostId});
         }
 
         [HttpGet, Route("save-post"), Authorize(AuthorizationPolicies.AuthenticatedPolicy)]

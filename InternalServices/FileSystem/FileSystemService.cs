@@ -135,6 +135,27 @@ namespace ViralLinks.InternalServices
             }
         }
 
+        public async Task UploadPostImage(EditPostModel postModel, Post post)
+        {
+            if(postModel.Image != null)
+            {
+                var fileExtension = Path.GetExtension(postModel.Image.FileName);
+                var fileName = Path.GetFileName(postModel.Image.Name);
+                using var stream = new MemoryStream();
+                await postModel.Image.CopyToAsync(stream);
+                var uri = await this.UploadBlob(stream,AzureStorageConfig.PostImagesContainer,post.PostId);
+               dbContext.Update(new FileMetaData{
+                   Id = post.PostId,
+                   Extension = fileExtension,
+                   LastUpdate = DateTime.Now,
+                   URI = uri,
+                   Name = fileName
+               });
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+
         public async Task UpdateProfilePicture(ApplicationUser user, Stream fileStream, string name, string extension)
         {
             var uri = await this.UploadBlob(fileStream, AzureStorageConfig.ProfilePicturesContainer,user.Id);

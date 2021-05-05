@@ -14497,6 +14497,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\temp\\Desktop\\ViralLinks\\Views\\Posts\\EditPost.cshtml",
+      "TargetPath": "Views\\Posts\\EditPost.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\temp\\Desktop\\ViralLinks\\Views\\Posts\\FullPostGuest.cshtml",
       "TargetPath": "Views\\Posts\\FullPostGuest.cshtml",
       "FileKind": "mvc"

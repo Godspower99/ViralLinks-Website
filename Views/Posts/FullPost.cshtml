@@ -12,6 +12,8 @@
    var saved_icon = Model.PostSaved ? "bookmark" : "bookmark_border";
 }
 <link rel="stylesheet" href="~/css/pen.css">
+<link rel="stylesheet" href="~/css/popup.css">
+
             <!-- Feeds for you -->
             <div class="row pt-0">
               <div class="col-md-3"></div>
@@ -63,12 +65,28 @@
                                       <a class="drop">
                                         <svg class="icon" enable-background="new 0 0 24 24" id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="12" cy="12" r="2"></circle><circle cx="12" cy="5" r="2"></circle><circle cx="12" cy="19" r="2"></circle></svg>
                                       </a>
-                                      <div class="dd-menu">
-                                        <ul>
-                                          <li>Report</li>
-                                          <li>Delete</li>
-                                        </ul>
-                                      </div>
+
+                                      <!-- user post -->
+                                      @if(Model.Post.UserId == Model.User.Id)
+                                      {
+                                        <div class="dd-menu">
+                                          <ul>
+                                            <li> <a style="color: #666; display: inline-block; width: 100%;" asp-action="EditPost" asp-controller="Posts" asp-route-postid="@Model.Post.PostId">Edit</a></li>
+                                            <li>
+	                                            <a class="button" href="#popup1">Let me Pop up</a>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                        <div id="popup1" class="overlay">
+	                                        <div class="popup">
+		                                        <h2>Here i am</h2>
+		                                        <a class="close" href="#">&times;</a>
+		                                        <div class="content">
+			                                        Thank to pop me out of that button, but now i'm done so you can close this window.
+		                                        </div>
+	                                        </div>
+                                        </div>
+                                      }
                                     </div>
                                  }
                                 </div>

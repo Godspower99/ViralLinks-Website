@@ -7,6 +7,7 @@
     var userIsAuthorized = Context.User.Identity.IsAuthenticated;
     var postItemIconClass = userIsAuthorized? "col-2" : "col-4 text-center";
 }
+<link rel="stylesheet" href="~/css/pen.css">
 
              <div class="row">
               <div class="col-md-3"></div>
@@ -251,6 +252,7 @@
                     {
                       var cert_color = post.PostCertificates.Item1 ? "#0395FF" : "gray";
                       var saved_icon = post.PostSaved ? "bookmark" : "bookmark_border";
+                      var menuid = "menu" + post.Post.PostId;
 
                       <div class="row pb-2 post_item" style="margin-left: 1px;">
                       <!--Image and name-->
@@ -297,8 +299,25 @@
                                       <p style="font-size: 16px;"><i style="color: #0395FF; cursor: pointer;" class="material-icons" onclick="savePost('@baseUri','@post.Post.PostId',this)">@saved_icon</i></p>
                                     </div>
                                     <!-- menu -->
-                                    <div class="@postItemIconClass">
+                                    @* <div class="@postItemIconClass">
                                       <p style="font-size: 16px;"><i class="fa fa-ellipsis-v" style="color: #0395FF;"></i></p>
+                                    </div> *@
+
+                                    <div class="@postItemIconClass">
+                                      <a class="drop" onclick="dropClick(event,'@menuid')">
+                                        <svg class="icon" enable-background="new 0 0 24 24" id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="12" cy="12" r="2"></circle><circle cx="12" cy="5" r="2"></circle><circle cx="12" cy="19" r="2"></circle></svg>
+                                      </a>
+
+                                      <!-- user post -->
+                                      @if(post.Post.UserId == Model.User.Id)
+                                      {
+                                        <div id="@menuid" class="dd-menu">
+                                          <ul>
+                                            <li> <a style="color: #666; display: inline-block; width: 100%;" asp-action="EditPost" asp-controller="Posts" asp-route-postid="@post.Post.PostId">Edit</a></li>
+                                            <li>Delete</li>
+                                          </ul>
+                                        </div>
+                                      }
                                     </div>
                                  }
                                 </div>
@@ -568,3 +587,39 @@ input[type="date"].valid, input[type="date"]:focus.valid, input[type="search"].v
 }
 
 </style>            
+ <script>
+
+  document.onclick = function()
+   {
+     var i =0;
+     var ddmenus = document.getElementsByClassName('dd-menu');
+    for(i; i < ddmenus.length; i++){ ddmenus[i].classList.remove('active');}
+   }
+
+$('.dd-menu ul li').each(function() {
+    var delay = $(this).index() * 50 + 'ms';
+
+    $(this).css({
+        '-webkit-transition-delay': delay,
+        '-moz-transition-delay': delay,
+        '-o-transition-delay': delay,
+        'transition-delay': delay
+    });                  
+});
+
+var dropClick = function(event,id)
+{
+  if (event.stopPropagation) {
+      event.stopPropagation();   
+  } else {
+      event.cancelBubble = true; 
+  }
+  var menu = document.getElementById(id);
+  menu.classList.add('active');
+};
+
+
+ $('.dd-menu').click (function(e){
+  e.stopPropagation();
+});
+ </script>

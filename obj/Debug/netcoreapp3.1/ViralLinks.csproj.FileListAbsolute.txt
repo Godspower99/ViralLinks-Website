@@ -235,3 +235,4 @@ C:\Users\temp\Desktop\ViralLinks\obj\Debug\netcoreapp3.1\Razor\Views\Error\BadRe
 C:\Users\temp\Desktop\ViralLinks\obj\Debug\netcoreapp3.1\Razor\Views\Account\ChangePassword.cshtml.g.cs
 C:\Users\temp\Desktop\ViralLinks\obj\Debug\netcoreapp3.1\Razor\Views\Account\ChangePasswordCompleted.cshtml.g.cs
 C:\Users\temp\Desktop\ViralLinks\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ProfileLayout.cshtml.g.cs
+C:\Users\temp\Desktop\ViralLinks\obj\Debug\netcoreapp3.1\Razor\Views\Posts\EditPost.cshtml.g.cs
